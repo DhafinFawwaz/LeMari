@@ -1,0 +1,12 @@
+stages:
+  - production
+
+unit-test:
+  stage: production
+  image: python:3.11
+  script:
+      - python main.py
+  artifacts:
+    paths:
+        - coverage
+    expire_in: 30days
