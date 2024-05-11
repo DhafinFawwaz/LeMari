@@ -1,0 +1,14 @@
+stages:
+  - test
+
+unit-test:
+  stage: test
+  image: python:3.12
+  script:
+    - pip install -r requirements.txt
+    - pytest --cov=src --cov-report=html
+  artifacts:
+    paths:
+      - /coverage/
+    expire_in: 1 week
+    
