@@ -1,14 +1,38 @@
+image: python:3.11
+
 stages:
+  - setup
+  - build
   - test
+  - deploy
+
+before_script:
+  - python --version ; pip --version  # For debugging
+  - pip install virtualenv
+  - python -m virtualenv venv
+  - .venv/Scripts/Activate.ps1
+
+setup:
+  stage: setup
+  script:
+    - pip install -r requirements.txt  # Assuming all dependencies are listed here
+
+build:
+  stage: build
+  script:
+    - pip install .
 
 unit-test:
   stage: test
-  image: python:3.11
   script:
-      - python.exe -m pip install --upgrade pip
-      - pip install -r requirements.txt
-      - pytest --cov-report=html --cov=src
+    - pytest --cov=src --cov-report=html
   artifacts:
     paths:
-        - coverage
-    expire_in: 30days
+      - /coverage/
+    expire_in: 1 week
+
+deploy:
+  stage: deploy
+  script:
+    - python main.py
+  environment: production
