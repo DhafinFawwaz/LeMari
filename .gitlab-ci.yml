@@ -1,4 +1,5 @@
-image: python:latest
+
+image: python:3.12
 
 before_script:
   - python --version ; pip --version  # For debugging
@@ -10,11 +11,17 @@ before_script:
 run:
   script:
     - pip install .
-    # run the command here
+    - test
 
 test:
+  stage: test
   script:
-    - echo "Nanti perintah testnya taro disini ya gan!"
+    - pip install -r requirements.txt
+    - pytest --cov=src --cov-report=html
+  artifacts:
+    paths:
+      - /coverage/
+    expire_in: 1 week
 
 
 deploy:
