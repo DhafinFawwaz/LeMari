@@ -7,7 +7,7 @@ stages:
   - deploy
 
 before_script:
-  - python --version ; pip --version  # For debugging
+  - python --version ; pip --version 
   - pip install virtualenv
   - python -m virtualenv venv
   - find -type f -name "activate"  -path "**/.venv/**"
@@ -27,10 +27,6 @@ test:
   stage: test
   script:
     - pytest --cov=src --cov-report=html
-  artifacts:
-    paths:
-      - /coverage/
-    expire_in: 1 week
 
 deploy:
   stage: deploy
