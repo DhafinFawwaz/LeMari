@@ -2,7 +2,6 @@ image: python:3.11
 
 stages:
   - setup
-  - build
   - test
   - deploy
 
@@ -17,11 +16,6 @@ setup:
   stage: setup
   script:
     - pip install -r requirements.txt  # Assuming all dependencies are listed here
-
-build:
-  stage: build
-  script:
-    - pip install .
 
 unit-test:
   stage: test
