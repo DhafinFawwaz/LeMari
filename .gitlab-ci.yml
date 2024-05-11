@@ -1,0 +1,25 @@
+image: python:latest
+
+before_script:
+  - python --version ; pip --version  # For debugging
+  - pip install virtualenv
+  - python -m virtualenv venv
+  - find -type f -name "activate"  -path "**/.venv/**"
+  - source $( `find -type f -name "activate"  -path "**/.venv/**"`)
+
+run:
+  script:
+    - pip install .
+    # run the command here
+
+test:
+  script:
+    - echo "Nanti perintah testnya taro disini ya gan!"
+
+
+deploy:
+  stage: deploy
+  script:
+    - python main.py
+  environment: production
+
