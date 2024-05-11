@@ -20,6 +20,8 @@ setup:
 unit-test:
   stage: test
   script:
+    - echo "Virtual environment activated"
+    - pip list  # Check if dateutil is installed
     - pytest --cov=src --cov-report=html
   artifacts:
     paths:
