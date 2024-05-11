@@ -1,35 +1,13 @@
-image: python:3.12
-
 stages:
-  - setup
-  - build
   - test
-  - deploy
 
-before_script:
-  - python --version ; pip --version 
-  - pip install virtualenv
-  - python -m virtualenv venv
-  - find -type f -name "activate"  -path "**/.venv/**"
-  - source $( `find -type f -name "activate"  -path "**/.venv/**"`)
-
-setup:
-  stage: setup
-  script:
-    - pip install -r requirements.txt  # Assuming all dependencies are listed here
-
-build:
-  stage: build
-  script:
-    - pip install .
-
-test:
+unit-test:
   stage: test
+  image: python:3.12
   script:
-    - pytest --cov=src --cov-report=html
-
-deploy:
-  stage: deploy
-  script:
-    - python main.py
-  environment: production
+      - pip install -r requirements.txt
+      - pytest --cov-report=html --cov=src
+  artifacts:
+    paths:
+        - coverage
+    expire_in: 30days
