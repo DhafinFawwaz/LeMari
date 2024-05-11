@@ -4,7 +4,8 @@ before_script:
   - python --version ; pip --version  # For debugging
   - pip install virtualenv
   - python -m virtualenv venv
-  - call .venv\Scripts\Activate.ps1
+  - `find -type f -name "activate"  -path "**/.venv/**"`
+  - source $( `find -type f -name "activate"  -path "**/.venv/**"`)
 
 run:
   script:
