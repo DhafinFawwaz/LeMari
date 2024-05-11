@@ -27,7 +27,7 @@ unit-test:
     - pytest --cov=src --cov-report=html
   artifacts:
     paths:
-      - /coverage/
+      - coverage
     expire_in: 1 week
 
 deploy:
