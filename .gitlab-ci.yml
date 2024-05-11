@@ -1,32 +1,34 @@
-image: python:3.12
+image: python:3.11
 
 stages:
   - setup
-  - build
   - test
   - deploy
 
 before_script:
-  - python --version ; pip --version 
+  - python --version ; pip --version  # For debugging
   - pip install virtualenv
   - python -m virtualenv venv
-  - find -type f -name "activate"  -path "**/.venv/**"
-  - source $( `find -type f -name "activate"  -path "**/.venv/**"`)
+  - dir
+  - venv\Scripts\Activate.ps1
+  - pip install -r requirements.txt
 
 setup:
   stage: setup
   script:
+    - pip install python-dateutil
     - pip install -r requirements.txt  # Assuming all dependencies are listed here
 
-build:
-  stage: build
-  script:
-    - pip install .
-
-test:
+unit-test:
   stage: test
   script:
+    - echo "Virtual environment activated"
+    - pip list  # Check if dateutil is installed
     - pytest --cov=src --cov-report=html
+  artifacts:
+    paths:
+      - coverage
+    expire_in: 1 week
 
 deploy:
   stage: deploy

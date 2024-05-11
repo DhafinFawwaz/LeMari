@@ -1,5 +1,6 @@
 import src.utils.add as addition
 
+
 class TestAddition:
     def test_nonzero_addition(self):
         assert addition.add(1, 2) == 3
