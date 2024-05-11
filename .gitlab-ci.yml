@@ -20,7 +20,6 @@ setup:
 unit-test:
   stage: test
   script:
-    - venv\Scripts\Activate.ps1
     - pytest --cov=src --cov-report=html
   artifacts:
     paths:
@@ -30,6 +29,5 @@ unit-test:
 deploy:
   stage: deploy
   script:
-    - venv\Scripts\Activate.ps1
     - python main.py
   environment: production
