@@ -10,7 +10,8 @@ before_script:
   - python --version ; pip --version  # For debugging
   - pip install virtualenv
   - python -m virtualenv venv
-  - .venv/Scripts/Activate.ps1
+  - dir .venv\Scripts
+  - .venv\Scripts\Activate.ps1
 
 setup:
   stage: setup
