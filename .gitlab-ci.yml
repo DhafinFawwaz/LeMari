@@ -1,8 +1,8 @@
 
-image: python:3.12
+image: python:latest
 
 before_script:
-  - python --version ; pip --version  # For debugging
+  - python --version ; pip --version 
   - pip install virtualenv
   - python -m virtualenv venv
   - find -type f -name "activate"  -path "**/.venv/**"
@@ -10,13 +10,11 @@ before_script:
 
 run:
   script:
-    - pip install .
-    - test
+    - pip install -r requirements.txt
 
 test:
   stage: test
   script:
-    - pip install -r requirements.txt
     - pytest --cov=src --cov-report=html
   artifacts:
     paths:
@@ -26,7 +24,5 @@ test:
 
 deploy:
   stage: deploy
-  script:
-    - python main.py
-  environment: production
+  script: python main.py
 
