@@ -33,5 +33,5 @@ unit-test:
 deploy:
   stage: deploy
   script:
-    - python main.py
+    - flet pack src/main.py
   environment: production
