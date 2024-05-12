@@ -33,5 +33,5 @@ unit-test:
 deploy:
   stage: deploy
   script:
-    - python main.py
+    - python src/main.py
   environment: production
