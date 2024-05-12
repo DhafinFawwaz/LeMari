@@ -6,3 +6,10 @@
 .vscode/
 *.sublime-project
 *.sublime-workspace
+
+# tests
+.pytest_cache
+.coverage
+
+coverage/*
+!coverage/.gitkeep 
