@@ -13,15 +13,20 @@ class DB:
     
 
     def init():
-        database_dir = '%s\\com.bercarat.le-mari\\' %  os.environ['APPDATA'] 
+        if os.name == 'posix':
+            data_home = os.getenv('XDG_DATA_HOME', os.path.join(os.path.expanduser('~'), '.local', 'share'))
+        else: 
+            data_home = os.getenv('APPDATA')
+
+        database_dir = os.path.join(data_home, 'com.bercarat.le-mari')
         if not os.path.exists(database_dir):
             os.makedirs(database_dir)
 
-        DB.db_path = '%sdatabase\\database.db' % database_dir
-        if not os.path.exists('%sdatabase' % database_dir):
-            os.makedirs('%sdatabase' % database_dir)
+        DB.db_path = os.path.join(database_dir, 'database', 'database.db')
+        if not os.path.exists(os.path.join(database_dir, 'database')):
+            os.makedirs(os.path.join(database_dir, 'database'))
 
-        DB.image_folder_path = '%simages' % database_dir
+        DB.image_folder_path = os.path.join(database_dir, 'images')
         if not os.path.exists(DB.image_folder_path):
             os.makedirs(DB.image_folder_path)
 
@@ -30,6 +35,7 @@ class DB:
         DB.cursor = DB.conn.cursor()
         DB.create_tables()
         DB.is_initialized = True
+
         
 
     def create_tables():
@@ -75,7 +81,7 @@ CREATE TABLE IF NOT EXISTS outfit_cloth (
         shutil.copy2(image_file.path, DB.get_image_path(image_file.name))
 
     def get_image_path(image_name):
-        return '%s\\%s' % (DB.image_folder_path, image_name)
+        return os.path.join(DB.image_folder_path, image_name)
     
 
     def execute(query: str, params: Tuple = ()) -> Cursor:
