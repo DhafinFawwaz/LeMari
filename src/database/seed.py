@@ -68,6 +68,8 @@ class Seeder():
             (0, 0), (0, 1), (1, 2), (1, 3), (1, 4), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9)
         ]
 
+        self.generate_outfit_cloths(OUTFIT_CLOTHS)
+
 
 
 
@@ -131,10 +133,11 @@ class Seeder():
         self.cursor.execute("DELETE FROM tag")
         self.cursor.execute("DELETE FROM outfit")
         self.cursor.execute("DELETE FROM cloth")
+        self.conn.commit()
         
 if __name__ == "__main__":
     seeder = Seeder()
     seeder.clear()
-    seeder.seed()
+    print(seeder.fetch_data("cloth"))
 
     
