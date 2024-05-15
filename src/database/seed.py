@@ -79,6 +79,7 @@ class Seeder():
         for idx in range(len(cloths)):
             cloth_name = cloths[idx][0].split(".")[0]
             self.__download(cloths[idx][1], cloths[idx][0])
+            
             self.cursor.execute("INSERT INTO cloth (id, name, image_name) VALUES (?, ?, ?)", (idx, cloth_name, cloths[idx][0]))
         
         self.conn.commit()
@@ -120,7 +121,7 @@ class Seeder():
         with open(destination, 'wb') as f:
             f.write(response.content)
         
-        print(f"Put {name}.")
+        print(f"Put {name} .")
 
     def fetch_data(self, table_name: str):
         self.cursor.execute(f"SELECT * FROM {table_name}")
