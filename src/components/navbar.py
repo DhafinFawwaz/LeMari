@@ -61,3 +61,4 @@ class Navbar(Container):
             # self.buttons[i].disabled = i == index
             self.buttons[i].set_disabled(i == index)
         self.update()
+        self.controls[index].update()

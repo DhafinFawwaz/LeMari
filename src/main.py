@@ -1,5 +1,5 @@
 import flet as ft
-from flet import Column, Row, Text, Icon, Container, Image, FilePicker
+from flet import Column, Row, Text, Icon, Container, Image, FilePicker, ElevatedButton, Theme
 from components.normal_button import NormalButton
 from components.nice_button import NiceButton
 from components.navbar import Navbar
@@ -7,21 +7,29 @@ from theme.themes import Themes
 from database.database import DB
 from flet import Image
 from components.styled_text import StyledText 
+from page.cloth_page import ClothPage
+from components.image_picker import ImagePicker
+
 
 def main(page: ft.Page):
     DB.init()
     StyledText.init_font_family(page)
-
     page.padding = ft.margin.all(0)
+    file_picker = ft.FilePicker(on_result=ImagePicker.on_file_selected)
+    page.overlay.append(file_picker)
+    
+    icon_size = 18
+    first_open_button = NormalButton("Outfit", ft.Icon(ft.icons.SPACE_DASHBOARD, "white", size=icon_size), text_overlay_color=Themes.slate950)
     page.add(Navbar(
             [
-                NormalButton("Outfit", ft.Icon(ft.icons.SPACE_DASHBOARD, "white"), text_overlay_color=Themes.slate950),
-                NormalButton("Cloth", ft.Icon(ft.icons.CHECKROOM, "white"), text_overlay_color=Themes.slate950),
-                NormalButton("Tags", ft.Icon(ft.icons.LOCAL_OFFER, "white"), text_overlay_color=Themes.slate950),
-                NormalButton("About", ft.Icon(ft.icons.INFO, "white"), text_overlay_color=Themes.slate950),
+                first_open_button,
+                NormalButton("Cloth", ft.Icon(ft.icons.CHECKROOM, "white", size=icon_size), text_overlay_color=Themes.slate950),
+                NormalButton("Tags", ft.Icon(ft.icons.LOCAL_OFFER, "white", size=icon_size), text_overlay_color=Themes.slate950),
+                NormalButton("About", ft.Icon(ft.icons.INFO, "white", size=icon_size), text_overlay_color=Themes.slate950),
+                
             ], [
                 StyledText("Outfit"),
-                StyledText("Cloth"),
+                ClothPage(file_picker),
                 StyledText("Tag"),
                 StyledText("About"),
             ],
@@ -40,5 +48,28 @@ def main(page: ft.Page):
             sidebar_width=200
         )
     )
+    first_open_button.set_disabled(True)
+
+
+
+#test
+# def main_test(page: ft.Page):
+#     page.add(Navbar(
+#         [
+#             NormalButton("Outfit", ft.Icon(ft.icons.ADD, "white"), text_overlay_color=Themes.slate950),
+#         ], [
+#             NormalButton("Cloth", ft.Icon(ft.icons.ADD, "white"), text_overlay_color=Themes.slate950),
+#             Container(
+#                 content=ElevatedButton(
+#                     text="H", 
+#                 ),
+#                 width=30
+#             ),
+#         ],
+#         sidebar_content= Container()
+#     ))
+# ft.app(target=main_test, assets_dir="assets")
+
 
 ft.app(target=main, assets_dir="assets")
+
