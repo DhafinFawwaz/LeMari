@@ -10,6 +10,7 @@ This will clear the database anyway!
 @pytest.fixture(scope="module")
 def seeder():
     seeder = Seeder()
+    seeder.clear()
     seeder.seed()
     yield seeder
     seeder.clear()
