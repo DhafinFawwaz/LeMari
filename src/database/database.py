@@ -7,7 +7,7 @@ import shutil
 class DB:
     conn: Connection
     cursor: Cursor
-    is_initialized: bool
+    is_initialized: bool = False
     db_path: str
     image_folder_path: str
     
@@ -26,7 +26,7 @@ class DB:
             os.makedirs(DB.image_folder_path)
 
 
-        DB.conn = connect(DB.db_path)
+        DB.conn = connect(DB.db_path, check_same_thread=False)
         DB.cursor = DB.conn.cursor()
         DB.create_tables()
         DB.is_initialized = True
@@ -35,26 +35,26 @@ class DB:
     def create_tables():
         DB.cursor.execute("""
 CREATE TABLE IF NOT EXISTS cloth (
-    id INTEGER PRIMARY KEY, 
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
     name TEXT NOT NULL UNIQUE,
     image_name TEXT NOT NULL UNIQUE
 );
         """)
         DB.cursor.execute("""
 CREATE TABLE IF NOT EXISTS outfit (
-    id INTEGER PRIMARY KEY, 
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
     name TEXT NOT NULL UNIQUE
 );
         """)
         DB.cursor.execute("""
 CREATE TABLE IF NOT EXISTS tag (
-    id INTEGER PRIMARY KEY, 
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
     name TEXT NOT NULL UNIQUE
 );
         """)
         DB.cursor.execute("""
 CREATE TABLE IF NOT EXISTS cloth_tag (
-    id INTEGER PRIMARY KEY, 
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
     cloth_id INTEGER,
     tag_id INTEGER, 
     FOREIGN KEY (cloth_id) REFERENCES cloth(id),
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS cloth_tag (
         """)
         DB.cursor.execute("""
 CREATE TABLE IF NOT EXISTS outfit_cloth (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     outfit_id INTEGER,
     cloth_id INTEGER,
     FOREIGN KEY (outfit_id) REFERENCES outfit(id),
@@ -73,6 +73,9 @@ CREATE TABLE IF NOT EXISTS outfit_cloth (
 
     def save_image(image_file: FilePickerFile):
         shutil.copy2(image_file.path, DB.get_image_path(image_file.name))
+    
+    def delete_image_by_path_if_exist(image_path: str):
+        pass
 
     def get_image_path(image_name):
         return '%s\\%s' % (DB.image_folder_path, image_name)
@@ -81,5 +84,14 @@ CREATE TABLE IF NOT EXISTS outfit_cloth (
     def execute(query: str, params: Tuple = ()) -> Cursor:
         if not DB.is_initialized:
             DB.init()
+        cursor = DB.cursor.execute(query, params)
+        cursor.connection.commit()
+        return cursor
+    
+    def executemany(query: str, params: List[Tuple] = ()) -> Cursor:
+        if not DB.is_initialized:
+            DB.init()
 
-        return DB.cursor.execute(query, params)
+        cursor = DB.cursor.executemany(query, params)
+        cursor.connection.commit()
+        return cursor
