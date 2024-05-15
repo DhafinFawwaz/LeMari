@@ -2,6 +2,7 @@ from sqlite3 import *
 from typing import *
 import os
 import requests
+import shutil
 
 class Seeder(): 
     conn: Connection
@@ -136,11 +137,11 @@ class Seeder():
         self.cursor.execute("DELETE FROM tag")
         self.cursor.execute("DELETE FROM outfit")
         self.cursor.execute("DELETE FROM cloth")
+        shutil.rmtree(self.image_folder_path)
         self.conn.commit()
         
 if __name__ == "__main__":
     seeder = Seeder()
     seeder.clear()
-    print(seeder.fetch_data("cloth"))
 
     
