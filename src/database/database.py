@@ -3,6 +3,7 @@ from typing import *
 import os
 from flet_core.file_picker import FilePickerFile
 import shutil
+from .seed import Seeder
 
 class DB:
     conn: Connection
@@ -35,6 +36,14 @@ class DB:
         DB.cursor = DB.conn.cursor()
         DB.create_tables()
         DB.is_initialized = True
+
+        # Tells that if seeding have been done before
+        # if not yet, go seed.
+        one_of_the_seed_image = DB.get_image_path("red-jeans.png")
+        if (not os.path.exists(one_of_the_seed_image)):
+            seeder = Seeder()
+            seeder.seed()
+        
 
         
 
