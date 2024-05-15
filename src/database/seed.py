@@ -58,12 +58,14 @@ class Seeder():
 
         self.generate_outfits(OUTFITS)
 
+        # This cloth_tags relation is absolutely random.
         CLOTH_TAGS = [
             (0, 0), (1, 0), (2, 3), (3, 3), (4, 3), (5, 3), (6, 3), (7, 3), (8, 3), (9, 3)
         ]
 
         self.generate_cloth_tags(CLOTH_TAGS)
 
+        # This is absolutely random too.
         OUTFIT_CLOTHS = [
             (0, 0), (0, 1), (1, 2), (1, 3), (1, 4), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9)
         ]
@@ -79,7 +81,7 @@ class Seeder():
         for idx in range(len(cloths)):
             cloth_name = cloths[idx][0].split(".")[0]
             self.__download(cloths[idx][1], cloths[idx][0])
-            
+
             self.cursor.execute("INSERT INTO cloth (id, name, image_name) VALUES (?, ?, ?)", (idx, cloth_name, cloths[idx][0]))
         
         self.conn.commit()

@@ -20,22 +20,32 @@ def test_database_files_exist(seeder):
 
 def test_cloth_data(seeder):
     cloth_data = seeder.fetch_data('cloth')
+
+    # Why overalls? absolutely random when choosing one of the cloths name.
     assert any('overalls' in item[1] for item in cloth_data), "No 'overalls' in cloth data"
 
 def test_tag_data(seeder):
     tag_data = seeder.fetch_data('tag')
+
+    # Why Casual? absolutely random when choosing one of the tags name.
     assert any('Casual' in item[1] for item in tag_data), "No 'Casual' tag found"
 
 def test_outfit_data(seeder):
     outfit_data = seeder.fetch_data('outfit')
+
+    # Why Casual Outfit? absolutely random when choosing one of the outfits name.
     assert any('Casual Outfit' in item[1] for item in outfit_data), "No 'Casual Outfit' found"
 
 def test_cloth_tag_relations(seeder):
     cloth_tag_data = seeder.fetch_data('cloth_tag')
+
+    # Why this magic number? it is generated while seeding, so if this assert fails, then seeding is actually broken.
     assert any(item[1] == 0 and item[2] == 0 for item in cloth_tag_data), "Mismatch in cloth_tag relations"
 
 def test_outfit_cloth_relations(seeder):
     outfit_cloth_data = seeder.fetch_data('outfit_cloth')
+
+    # Why this magic number? it is generated while seeding, so if this assert fails, then seeding is actually broken.
     assert any(item[1] == 0 and item[2] == 0 for item in outfit_cloth_data), "Mismatch in outfit_cloth relations"
 
 def test_clear_data(seeder):
