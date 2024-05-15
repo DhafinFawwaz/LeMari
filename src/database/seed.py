@@ -50,6 +50,26 @@ class Seeder():
 
         self.generate_cloths(CLOTHS)
 
+        TAGS = ["Superhero", "Unique", "Freak", "Casual", "Classic", "Elegant", "Sporty", "Formal", "Sexy"]
+
+        self.generate_tags(TAGS)
+
+        OUTFITS = ["Superhero Outfit", "Casual Outfit", "Classic Outfit", "Overall", "Fire Fighter"]
+
+        self.generate_outfits(OUTFITS)
+
+        CLOTH_TAGS = [
+            (0, 0), (1, 0), (2, 3), (3, 3), (4, 3), (5, 3), (6, 3), (7, 3), (8, 3), (9, 3)
+        ]
+
+        self.generate_cloth_tags(CLOTH_TAGS)
+
+        OUTFIT_CLOTHS = [
+            (0, 0), (0, 1), (1, 2), (1, 3), (1, 4), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9)
+        ]
+
+
+
 
 
     def generate_cloths(self, cloths: List[Tuple[str, str]]):
@@ -60,6 +80,33 @@ class Seeder():
             self.cursor.execute("INSERT INTO cloth (id, name, image_name) VALUES (?, ?, ?)", (idx, cloth_name, cloths[idx][0]))
         
         self.conn.commit()
+
+    
+    def generate_tags(self, tags: List[str]):
+        for idx in range(len(tags)):
+            self.cursor.execute("INSERT INTO tag (id, name) VALUES (?, ?)", (idx, tags[idx]))
+        
+        self.conn.commit()
+
+    def generate_outfits(self, outfits: List[str]):
+        for idx in range(len(outfits)):
+            self.cursor.execute("INSERT INTO outfit (id, name) VALUES (?, ?)", (idx, outfits[idx]))
+        
+        self.conn.commit()
+
+    def generate_cloth_tags(self, cloth_tags: List[Tuple[int, int]]):
+        for idx in range(len(cloth_tags)):
+            self.cursor.execute("INSERT INTO cloth_tag (id, cloth_id, tag_id) VALUES (?, ?, ?)", (idx, cloth_tags[idx][0], cloth_tags[idx][1]))
+        
+        self.conn.commit()
+    
+    def generate_outfit_cloths(self, outfit_cloths: List[Tuple[int, int]]):
+        for idx in range(len(outfit_cloths)):
+            self.cursor.execute("INSERT INTO outfit_cloth (id, outfit_id, cloth_id) VALUES (?, ?, ?)", (idx, outfit_cloths[idx][0], outfit_cloths[idx][1]))
+        
+        self.conn.commit()
+
+
         
 
     def __download(self, url: str, name: str):
@@ -78,9 +125,16 @@ class Seeder():
         rows = self.cursor.fetchall()
         return rows
 
+    def clear(self): 
+        self.cursor.execute("DELETE FROM cloth_tag")
+        self.cursor.execute("DELETE FROM outfit_cloth")
+        self.cursor.execute("DELETE FROM tag")
+        self.cursor.execute("DELETE FROM outfit")
+        self.cursor.execute("DELETE FROM cloth")
         
 if __name__ == "__main__":
     seeder = Seeder()
+    seeder.clear()
     seeder.seed()
 
     
