@@ -10,7 +10,10 @@ This will clear the database anyway!
 @pytest.fixture(scope="module")
 def seeder():
     seeder = Seeder()
-    seeder.clear()
+
+    if os.path.exists(seeder.image_folder_path):
+        seeder.clear()
+
     seeder.seed()
     yield seeder
     seeder.clear()

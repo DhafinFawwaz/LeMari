@@ -27,6 +27,7 @@ class Seeder():
             os.makedirs(os.path.join(database_dir, 'database'))
 
         self.image_folder_path = os.path.join(database_dir, 'images')
+        print(self.image_folder_path)
         if not os.path.exists(self.image_folder_path):
             os.makedirs(self.image_folder_path)
 
@@ -138,6 +139,7 @@ class Seeder():
         self.cursor.execute("DELETE FROM outfit")
         self.cursor.execute("DELETE FROM cloth")
         shutil.rmtree(self.image_folder_path)
+        os.makedirs(self.image_folder_path)
         self.conn.commit()
         
 if __name__ == "__main__":
