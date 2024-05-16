@@ -8,6 +8,7 @@ from database.database import DB
 from flet import Image
 from components.styled_text import StyledText 
 from page.cloth_page import ClothPage
+from page.outfit_page import OutfitPage
 from components.image_picker import ImagePicker
 
 
@@ -28,7 +29,7 @@ def main(page: ft.Page):
                 NormalButton("About", ft.Icon(ft.icons.INFO, "white", size=icon_size), text_overlay_color=Themes.slate950),
                 
             ], [
-                StyledText("Outfit"),
+                OutfitPage(),
                 ClothPage(file_picker),
                 StyledText("Tag"),
                 StyledText("About"),
