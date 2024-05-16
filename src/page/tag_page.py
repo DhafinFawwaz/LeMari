@@ -113,15 +113,18 @@ class TagPage(Stack):
 
     def delete_handler(self, tag: Tag):
         print(f"Deleting {tag}")
-        tag.delete()
-        self.pills.controls.clear()
-        self.pills.controls = [
-            PillTag(tagz, on_click=lambda e,tagz=tagz: self.show_edit_dialog(e, tagz)) for tagz in
-            Tag.get_all()]
-        self.update()
-        self.main_dialog.close()
+        try:
+            tag.delete()
+            self.pills.controls.clear()
+            self.pills.controls = [
+                PillTag(tagz, on_click=lambda e,tagz=tagz: self.show_edit_dialog(e, tagz)) for tagz in
+                Tag.get_all()]
+            self.update()
+            self.main_dialog.close()
+        except:
+            self.show_error_dialog(f"{tag.name} sedang digunakan")
 
-    def on_change_edit(self, e, current_change):
+    def on_change_edit(self, e):
         self.current_change = e
 
     def show_edit_dialog(self, e, tag: Tag):
