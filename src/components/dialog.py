@@ -45,9 +45,9 @@ class Dialog(Container):
         content: Container = Container(),
         visible=False,
         bottom_controls: list[Control] = [],
-        width= None, 
-        height= None,
-        margin= margin.symmetric(50, 100),
+        width = None,
+        height = None,
+        margin = margin.symmetric(50, 100),
     ):
         self.dialog_content: Container = Container()
         self.bottom_controls = bottom_controls
@@ -59,7 +59,7 @@ class Dialog(Container):
         self.title_text = StyledText(title, color=Themes.slate950, weight=800, size=25)
         self.background = Container(
             expand=True,
-            bgcolor= Themes.slate950,
+            bgcolor=Themes.slate950,
             opacity=0,
             animate_opacity=Animation(
                 duration=Dialog.animation_duration,

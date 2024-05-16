@@ -34,7 +34,7 @@ class StyledTextField(Container):
         prefix_icon: Icon = None,
         placeholder: str= "Search",
         focused_border_width=2,
-        on_change=None,
+        on_change=None
     ):
         self.focused_border_width = focused_border_width
         self.on_change = on_change
