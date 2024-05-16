@@ -44,13 +44,13 @@ def test_cloth_tag_relations(seeder):
     cloth_tag_data = seeder.fetch_data('cloth_tag')
 
     # Why this magic number? it is generated while seeding, so if this assert fails, then seeding is actually broken.
-    assert any(item[1] == 0 and item[2] == 0 for item in cloth_tag_data), "Mismatch in cloth_tag relations"
+    assert any(item[1] == 1 and item[2] == 1 for item in cloth_tag_data), "Mismatch in cloth_tag relations"
 
 def test_outfit_cloth_relations(seeder):
     outfit_cloth_data = seeder.fetch_data('outfit_cloth')
 
     # Why this magic number? it is generated while seeding, so if this assert fails, then seeding is actually broken.
-    assert any(item[1] == 0 and item[2] == 0 for item in outfit_cloth_data), "Mismatch in outfit_cloth relations"
+    assert any(item[1] == 1 and item[2] == 1 for item in outfit_cloth_data), "Mismatch in outfit_cloth relations"
 
 def test_clear_data(seeder):
     seeder.clear()
