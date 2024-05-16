@@ -3,6 +3,8 @@ from typing import *
 import os
 from flet_core.file_picker import FilePickerFile
 import shutil
+from .seed import Seeder
+
 
 class DB:
     conn: Connection
@@ -10,12 +12,11 @@ class DB:
     is_initialized: bool = False
     db_path: str
     image_folder_path: str
-    
 
     def init():
         if os.name == 'posix':
             data_home = os.getenv('XDG_DATA_HOME', os.path.join(os.path.expanduser('~'), '.local', 'share'))
-        else: 
+        else:
             data_home = os.getenv('APPDATA')
 
         database_dir = os.path.join(data_home, 'com.bercarat.le-mari')
@@ -36,6 +37,12 @@ class DB:
         DB.create_tables()
         DB.is_initialized = True
 
+        # Tells that if seeding have been done before
+        # if not yet, go seed.
+        one_of_the_seed_image = DB.get_image_path("red-jeans.png")
+        if (not os.path.exists(one_of_the_seed_image)):
+            seeder = Seeder()
+            seeder.seed()
         
 
     def create_tables():
