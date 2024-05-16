@@ -30,6 +30,8 @@ class NiceButton(Container):
         self.bg_overlay_color = bg_overlay_color
         self.overlay_scale = overlay_scale
         self.tap_scale = tap_scale
+        self.text_overlay_color = text_overlay_color
+        self.text_color = text_color
 
         super().__init__(
             animate_scale=Animation(
@@ -58,9 +60,11 @@ class NiceButton(Container):
         if e.data == "true": 
             self.scale = self.overlay_scale
             self.bgcolor = self.bg_overlay_color
+            self.text_content.color = self.text_overlay_color
         else: 
             self.scale = Themes.scaledefault
             self.bgcolor = self.bg_default_color
+            self.text_content.color = self.text_color
         self.update()
 
     def button_on_tap(self, e):
