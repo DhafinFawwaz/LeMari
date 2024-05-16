@@ -3,6 +3,7 @@ from typing import *
 import os
 import requests
 import shutil
+import shutil
 
 class Seeder(): 
     conn: Connection
@@ -138,6 +139,11 @@ class Seeder():
         self.cursor.execute("DELETE FROM tag")
         self.cursor.execute("DELETE FROM outfit")
         self.cursor.execute("DELETE FROM cloth")
+        shutil.rmtree(self.image_folder_path)
+        self.conn.commit()
+    
+    def add_tag(self, tag_name: str):
+        self.cursor.execute("INSERT INTO tag (name) VALUES (?)", (tag_name,))
         shutil.rmtree(self.image_folder_path)
         os.makedirs(self.image_folder_path)
         self.conn.commit()
