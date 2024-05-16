@@ -44,6 +44,7 @@ class DB:
             seeder = Seeder()
             seeder.seed()
         
+        
 
     def create_tables():
         DB.cursor.execute("""
