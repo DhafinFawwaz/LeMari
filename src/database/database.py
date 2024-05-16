@@ -5,18 +5,18 @@ from flet_core.file_picker import FilePickerFile
 import shutil
 from .seed import Seeder
 
+
 class DB:
     conn: Connection
     cursor: Cursor
     is_initialized: bool = False
     db_path: str
     image_folder_path: str
-    
 
     def init():
         if os.name == 'posix':
             data_home = os.getenv('XDG_DATA_HOME', os.path.join(os.path.expanduser('~'), '.local', 'share'))
-        else: 
+        else:
             data_home = os.getenv('APPDATA')
 
         database_dir = os.path.join(data_home, 'com.bercarat.le-mari')
@@ -44,8 +44,6 @@ class DB:
             seeder = Seeder()
             seeder.seed()
         
-        
-
         
 
     def create_tables():
