@@ -116,7 +116,7 @@ class TagPage(Stack):
         tag.delete()
         self.pills.controls.clear()
         self.pills.controls = [
-            PillTag(tagz, on_click=lambda e: self.show_edit_dialog(e, tagz)) for tagz in
+            PillTag(tagz, on_click=lambda e,tagz=tagz: self.show_edit_dialog(e, tagz)) for tagz in
             Tag.get_all()]
         self.update()
         self.main_dialog.close()
