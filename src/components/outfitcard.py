@@ -1,13 +1,13 @@
 from typing import Optional, Any, Union, List
 from theme.themes import Themes
 from components.styled_text import StyledText
-from flet import Card, Image, Row, Column, Container, Padding, ImageFit, ImageRepeat, RoundedRectangleBorder, CrossAxisAlignment, ClipBehavior, FilterQuality, padding
+from flet import Card, Image, Row, Column, Container, Padding, ImageFit, ImageRepeat, RoundedRectangleBorder, CrossAxisAlignment, ClipBehavior, FilterQuality, padding, Animation, AnimationCurve
 from database.cloth import Cloth
 from database.outfit import Outfit
 from typing import Callable
 
 
-class OutfitCard(Card):
+class OutfitCard(Container):
     def __init__(
         self,
         outfit: Outfit,
@@ -36,8 +36,14 @@ class OutfitCard(Card):
                     width=width,
                     padding=Padding(0, 0, 0, 12),
                 ),
-                shape=RoundedRectangleBorder(radius=corner_radius),
-                clip_behavior=ClipBehavior.ANTI_ALIAS
+                border_radius=corner_radius,
+                clip_behavior=ClipBehavior.ANTI_ALIAS,
+                animate_scale=Animation(
+                    duration=150,
+                    curve=AnimationCurve.EASE_OUT_BACK,
+                ),
+                on_hover=self.on_card_hover,
+                on_tap_down=self.on_card_tap,
             )
         elif (len(outfit.cloth_list) == 1):
             super().__init__(
@@ -56,8 +62,14 @@ class OutfitCard(Card):
                     width=width,
                     padding=Padding(0, 0, 0, 12),
                 ),
-                shape=RoundedRectangleBorder(radius=corner_radius),
-                clip_behavior=ClipBehavior.ANTI_ALIAS
+                border_radius=corner_radius,
+                clip_behavior=ClipBehavior.ANTI_ALIAS,
+                animate_scale=Animation(
+                    duration=150,
+                    curve=AnimationCurve.EASE_OUT_BACK,
+                ),
+                on_hover=self.on_card_hover,
+                on_tap_down=self.on_card_tap,
             )
         elif (len(outfit.cloth_list) == 2):
             super().__init__(
@@ -84,8 +96,14 @@ class OutfitCard(Card):
                     width=width,
                     padding=Padding(0, 0, 0, 12),
                 ),
-                shape=RoundedRectangleBorder(radius=corner_radius),
-                clip_behavior=ClipBehavior.ANTI_ALIAS
+                border_radius=corner_radius,
+                clip_behavior=ClipBehavior.ANTI_ALIAS,
+                animate_scale=Animation(
+                    duration=150,
+                    curve=AnimationCurve.EASE_OUT_BACK,
+                ),
+                on_hover=self.on_card_hover,
+                on_tap_down=self.on_card_tap,
             )
         elif (len(outfit.cloth_list) == 3):
             super().__init__(
@@ -120,8 +138,14 @@ class OutfitCard(Card):
                     width=width,
                     padding=Padding(0, 0, 0, 12),
                 ),
-                shape=RoundedRectangleBorder(radius=corner_radius),
-                clip_behavior=ClipBehavior.ANTI_ALIAS
+                border_radius=corner_radius,
+                clip_behavior=ClipBehavior.ANTI_ALIAS,
+                animate_scale=Animation(
+                    duration=150,
+                    curve=AnimationCurve.EASE_OUT_BACK,
+                ),
+                on_hover=self.on_card_hover,
+                on_tap_down=self.on_card_tap,
             )
         else:
             super().__init__(
@@ -164,6 +188,22 @@ class OutfitCard(Card):
                     width=width,
                     padding=Padding(0, 0, 0, 12),
                 ),
-                shape=RoundedRectangleBorder(radius=corner_radius),
-                clip_behavior=ClipBehavior.ANTI_ALIAS
+                border_radius=corner_radius,
+                clip_behavior=ClipBehavior.ANTI_ALIAS,
+                animate_scale=Animation(
+                    duration=150,
+                    curve=AnimationCurve.EASE_OUT_BACK,
+                ),
+                on_hover=self.on_card_hover,
+                on_tap_down=self.on_card_tap,
             )
+
+    def on_card_hover(self, e):
+        if(e.data == "true"): self.scale = 1.1
+        else: self.scale = 1
+
+        self.update()
+
+    def on_card_tap(self, e):
+        self.scale = 1.2
+        self.update()

@@ -15,24 +15,38 @@ from components.tag_picker import TagPicker
 from components.small_button import SmallButton
 from components.image_picker import ImagePicker
 from components.outfitcard import OutfitCard
+from components.cloth_picker import ClothPicker
 from typing import List
 
 
 class OutfitPage(Container):
+    def on_add_outfit(self, e):
+        try:
+            new_outfit = Outfit(self.outfit_name_field.value, self.cloth_picker.get_selected_cloths())
+            new_outfit.save()
+            self.main_dialog.close()
+            self.update()
+        except Exception as e:
+            self.main_dialog.close()
+            print(str(e))
+            pass
+
     def show_insert_dialog(self, e):
         self.outfit_name_field = StyledTextField("Outfit Name", placeholder="Enter Outfit Name")
-        
+        self.cloth_picker = ClothPicker()
         self.main_dialog.show("Insert Outfit",
             Column(
                 spacing=5,
                 controls=[
-                    StyledText("Cloth Name", 13),
+                    StyledText("Outfit Name", 13),
                     self.outfit_name_field,
+                    Container(height=7),
+                    self.cloth_picker
                 ],
                 expand=True
             ),
             [
-                NiceButton("Insert Cloth", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=None, bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
+                NiceButton("Insert Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_add_outfit, bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
             ]
         )
 
@@ -53,7 +67,14 @@ class OutfitPage(Container):
         super().update()
 
     def __init__(self):
-        self.outfit_card_list = []
+        self.outfit_list = Outfit.get_all_outfit()
+        self.outfit_card_list = [
+            OutfitCard(
+                outfit=outfit,
+                on_click=None,
+            ) for outfit in self.outfit_list
+        ]
+        self.outfit_name_field = StyledTextField("Outfit Name", placeholder="Enter Outfit Name")
         self.outfit_list_row = Row(
             vertical_alignment=CrossAxisAlignment.START,
             controls=self.outfit_card_list,
@@ -66,6 +87,8 @@ class OutfitPage(Container):
             ],
             margin=margin.symmetric(60, 170),                        
         )
+
+        self.cloth_picker = ClothPicker()
 
         super().__init__(
             margin=margin.all(0),
@@ -80,7 +103,7 @@ class OutfitPage(Container):
                             scroll=ScrollMode.ADAPTIVE,
                             controls=[
                                 StyledSearchBar(),
-                                self.outfit_list_row
+                                self.outfit_list_row,
                             ]
                         )
                     ),
