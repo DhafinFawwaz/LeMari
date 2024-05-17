@@ -14,24 +14,51 @@ from components.tag_picker import TagPicker
 from components.small_button import SmallButton
 from components.image_picker import ImagePicker
 import time
+import os
 
 class ClothPage(Container):
     # Insert cloth in database
     def on_add_cloth(self, e):
         try:
+            # If user didn't select any image, raise an exception
+            if (self.image_picker.choosen_image == None):
+                raise Exception("No image selected", "Please select an image.")
+
+            # If somehow the selected image is a directory, raise an exception
+            if (os.path.isdir(self.image_picker.choosen_image.path)):
+                raise Exception("A directory?", "The selected image is a directory, please select a file.")
+            
+            # If somehow the selected image extension is not jpg, jpeg, or png, raise an exception
+            if (not self.image_picker.choosen_image.name.lower().endswith(('.jpg', '.jpeg', '.png'))):
+                raise Exception("Invalid format", "The selected image must be a jpg, jpeg, or png file.")
+            
+            # OK image's fine, but how about the name?
+            if (self.cloth_name_field.value == ""):
+                raise Exception("Insert name", "Please enter the cloth name.")
+            
+            # OK, image's fine, let's continue
             new_cloth = Cloth(self.cloth_name_field.value, self.image_picker.choosen_image.name, self.tag_picker.choosen_tags)
             new_cloth.save()
             Cloth.save_image(self.image_picker.choosen_image)
             self.main_dialog.close()
             self.update()
         except Exception as e:
-            self.error_dialog.show("Error", StyledText(str(e), 16))
+            self.error_dialog.show(e.args[0], StyledText(e.args[1], 16))
             print(str(e))
-            # TODO: handle error message
 
     # Edit cloth in database
     def on_edit_cloth(self, e):
         try:
+            # If somehow the selected image is a directory, raise an exception
+            if (os.path.isdir(self.image_picker.choosen_image.path)):
+                raise Exception("A directory?", "The selected image is a directory, please select a file.")
+            
+            # If somehow the selected image extension is not jpg, jpeg, or png, raise an exception
+            if (not self.image_picker.choosen_image.name.lower().endswith(('.jpg', '.jpeg', '.png'))):
+                raise Exception("Invalid format", "The selected image must be a jpg, jpeg, or png file.")
+            
+
+            # OK, image's fine, let's continue
             old_image_path = self.current_cloth.get_image_path()
             new_image_path = self.image_picker.choosen_image.path
             if old_image_path != new_image_path:
@@ -45,10 +72,9 @@ class ClothPage(Container):
             self.main_dialog.close()
             self.update()
         except Exception as e:
-            self.error_dialog.show("Error", StyledText(str(e), 16)) 
+            self.error_dialog.show(e.args[0], StyledText(e.args[1], 16)) 
             print(str(e))
-            # TODO: handle error message
-
+            
     # Delete cloth in database
     def on_delete_cloth(self, e):
         try:
@@ -58,9 +84,7 @@ class ClothPage(Container):
         except Exception as e:
             self.error_dialog.show("Error", StyledText(str(e), 16)) 
             print(str(e))
-            # TODO: handle error message for
-            # - when image not found (probably just ignore it, no pop up)
-            # - ...
+
 
 
     # Show insert dialog pop up
