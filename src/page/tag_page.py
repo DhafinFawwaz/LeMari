@@ -35,11 +35,11 @@ class TagPage(Stack):
     def changehandler(self, e):
         self.pills.controls.clear()
         if len(e) == 0:
-            for tags in self.tags_data:
+            for tags in Tag.get_all():
                 self.pills.controls.append(PillTag(tags, on_click=lambda e, tag=tags: self.show_edit_dialog(e, tag)))
         else:
-            for tags in self.tags_data:
-                if e in tags.name:
+            for tags in Tag.get_all():
+                if e.lower() in tags.name.lower():
                     self.pills.controls.append(
                         PillTag(tags, on_click=lambda e, tag=tags: self.show_edit_dialog(e, tag)))
         self.update()
@@ -49,19 +49,19 @@ class TagPage(Stack):
 
     def input_submit_handler(self, e):
         if (self.string_tag is not None) and (len(self.string_tag) > 0) and not (
-                self.string_tag.strip() in self.tags_data):
+                self.string_tag.strip() in Tag.get_all()):
             print(e)
             new_tag = Tag(self.string_tag.strip())
             new_tag.save()
             self.pills.controls.clear()
             self.pills.controls = [
-                PillTag(tag, on_click=lambda e, tag=tag: self.show_edit_dialog(e, tag)) for tag in
+                PillTag(tag, on_click=lambda e, tag =tag: self.show_edit_dialog(e, tag)) for tag in
                 Tag.get_all()]
             self.update()
             self.main_dialog.close()
         elif self.string_tag is None or len(self.string_tag) == 0:
             self.show_error_dialog("Input gabole kosong yak 😎")
-        elif self.string_tag.strip() in self.tags_data:
+        elif self.string_tag.strip() in Tag.get_all():
             self.show_error_dialog(f"{e} sudah ada")
         else:
             self.show_error_dialog("error mas")
@@ -108,15 +108,19 @@ class TagPage(Stack):
         self.main_dialog.close()
 
     def delete_handler(self, tag: Tag):
-        tag.delete()
-        self.pills.controls.clear()
-        self.pills.controls = [
-            PillTag(tagz, on_click=lambda e: self.show_edit_dialog(e, tagz)) for tagz in
-            Tag.get_all()]
-        self.update()
-        self.main_dialog.close()
+        print(f"Deleting {tag}")
+        try:
+            tag.delete()
+            self.pills.controls.clear()
+            self.pills.controls = [
+                PillTag(tagz, on_click=lambda e,tagz=tagz: self.show_edit_dialog(e, tagz)) for tagz in
+                Tag.get_all()]
+            self.update()
+            self.main_dialog.close()
+        except:
+            self.show_error_dialog(f"{tag.name} sedang digunakan")
 
-    def on_change_edit(self, e, current_change):
+    def on_change_edit(self, e):
         self.current_change = e
 
     def show_edit_dialog(self, e, tag: Tag):
@@ -165,12 +169,9 @@ class TagPage(Stack):
         self.string_tag = None
         self.main_dialog = Dialog(height=220, width=500)
         self.error_dialog = ErrorDialog()
-        self.tags_data: List[Tag] = Tag.get_all()
-        # self.tags_data: List[Tag] = [Tag("Birthday"), Tag("Activity"), Tag("Casual"), Tag("Formal"), Tag("Party")]
-        # self.tes_tag = PillTag(Tag(name="tes"))
         self.pills = Row(
             controls=[PillTag(tag, on_click=lambda e, tag=tag: self.show_edit_dialog(e, tag)) for tag in
-                      self.tags_data],
+                      Tag.get_all()],
             wrap=True,
             auto_scroll=True,
             tight=True
