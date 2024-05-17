@@ -25,7 +25,7 @@ class OutfitPage(Container):
             new_outfit = Outfit(self.outfit_name_field.value, self.cloth_picker.get_selected_cloths())
             new_outfit.save()
             self.main_dialog.close()
-            self.update_outfit_card_list()
+            self.update()
         except Exception as e:
             self.main_dialog.close()
             print(str(e))
@@ -91,7 +91,7 @@ class OutfitPage(Container):
             expand=True
         )
         self.content = self.edit_outfit_page
-        self.update()
+        super().update()
 
     def show_insert_dialog(self, e):
         self.outfit_name_field = StyledTextField(
@@ -117,8 +117,8 @@ class OutfitPage(Container):
 
     def back(self, e):
         self.content = self.main_page
+        super().update()
         self.update()
-        self.update_outfit_card_list()
 
     def show_detail_dialog(self, e, outfit: Outfit):
         self.current_outfit = outfit
@@ -155,11 +155,14 @@ class OutfitPage(Container):
         ]
         self.outfit_list_row.controls = self.outfit_card_list
         self.outfit_list_row.update()
-        self.update()
+    
+    def update(self):
+        self.update_outfit_card_list()
+        super().update()
 
     def on_search(self, e):
         self.current_search = e
-        self.update_outfit_card_list()
+        self.update()
 
     def __init__(self):
         self.outfit_list = Outfit.get_all_outfit()
