@@ -11,6 +11,7 @@ from page.tag_page import TagPage
 from components.styled_text import StyledText
 from page.cloth_page import ClothPage
 from components.image_picker import ImagePicker
+from page.about_page import AboutPage
 
 
 def main(page: ft.Page):
@@ -33,7 +34,7 @@ def main(page: ft.Page):
             StyledText("Outfit"),
             ClothPage(file_picker),
             TagPage(),
-            StyledText("About"),
+            AboutPage(),
         ],
         sidebar_content=Column(
             controls=[

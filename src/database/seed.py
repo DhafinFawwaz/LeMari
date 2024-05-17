@@ -28,7 +28,6 @@ class Seeder():
             os.makedirs(os.path.join(database_dir, 'database'))
 
         self.image_folder_path = os.path.join(database_dir, 'images')
-        print(self.image_folder_path)
         if not os.path.exists(self.image_folder_path):
             os.makedirs(self.image_folder_path)
 
@@ -126,7 +125,6 @@ class Seeder():
         with open(destination, 'wb') as f:
             f.write(response.content)
         
-        print(f"Put {name} .")
 
     def fetch_data(self, table_name: str):
         self.cursor.execute(f"SELECT * FROM {table_name}")
