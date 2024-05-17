@@ -216,7 +216,5 @@ class ClothPicker(Container):
                         )
                     )
                 ],
-                scroll=ScrollMode.ADAPTIVE,
             ),
-            expand=True
         )
