@@ -12,7 +12,6 @@ class Tag:
         return str((self.id, self.name))
 
     def save(self):
-        print(f"save {self.name}")
         cursor = DB.execute("INSERT INTO tag (name) VALUES (?)", (self.name,))
         self.id = cursor.lastrowid
 
@@ -26,9 +25,7 @@ class Tag:
     def get_all() -> List["Tag"]:
         cursor: Cursor = DB.execute("SELECT * FROM tag")
         res = cursor.fetchall()
-        print(f"Hasil res {res}")
         tag_list: List[Tag] = []
         for row in res:
-            print(row)
             tag_list.append(Tag(name=row[1], id=row[0]))
         return tag_list
