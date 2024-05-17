@@ -33,7 +33,6 @@ class PillTag(Row):
 
 class TagPage(Stack):
     def changehandler(self, e):
-        print(f"hasil perubahan {e}")
         self.pills.controls.clear()
         if len(e) == 0:
             for tags in Tag.get_all():
@@ -46,7 +45,6 @@ class TagPage(Stack):
         self.update()
 
     def input_change_handler(self, e):
-        print(f"hasil perubahan {e}")
         self.string_tag = e
 
     def input_submit_handler(self, e):
@@ -98,11 +96,9 @@ class TagPage(Stack):
         )
 
     def show_error_dialog(self, message):
-        print(f"Show Error: {message}")
         self.error_dialog.show(title="ERROR", content=StyledText(str(message), 16))
 
     def edit_handler(self, tag: Tag, new_name):
-        print(f"Editing {tag.name} to {new_name}")
         tag.update(new_name)
         self.pills.controls.clear()
         self.pills.controls = [
