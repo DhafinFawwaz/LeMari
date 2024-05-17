@@ -33,6 +33,36 @@ class Outfit:
         loaded = json.loads(cloth_json)
         return [Cloth(name=loaded_cloth['name'], id=loaded_cloth['id'], tag_list=[], image_name=loaded_cloth['image_name']) for loaded_cloth in loaded if loaded_cloth['id'] != None]
 
+    def get_all_by_search(search_filter: str) -> List["Outfit"]:
+        outfit_list = Outfit.get_all_outfit()
+        if len(search_filter) > 0:
+            outfit_list = [outfit for outfit in outfit_list if search_filter.lower() in outfit.name.lower()]
+        return outfit_list
+    
+    def get_cloth_list(self) -> List["Cloth"]:
+        cursor: Cursor = DB.execute("""
+SELECT cloth.id, cloth.name, cloth.image_name,
+json_group_array(json_object('id', tag.id, 'name', tag.name)) as tagList
+FROM outfit_cloth
+INNER JOIN cloth ON outfit_cloth.cloth_id = cloth.id
+LEFT JOIN cloth_tag ON cloth.id = cloth_tag.cloth_id
+LEFT JOIN tag ON cloth_tag.tag_id = tag.id
+WHERE outfit_cloth.outfit_id = ?
+GROUP BY cloth.id
+ORDER BY cloth.name
+""", (self.id,))
+        res = cursor.fetchall()
+        cloth_list: List[Cloth] = []
+        for row in res:
+            cloth = Cloth(
+                id=row[0],
+                name=row[1],
+                image_name=row[2],
+                tag_list=Cloth.tag_list_from_json(row[3])
+            )
+            cloth_list.append(cloth)
+        return cloth_list
+
     def get_all_outfit() -> List["Outfit"]:
         cursor: Cursor = DB.execute("""
 SELECT outfit.id, outfit.name, 

@@ -42,6 +42,7 @@ class OutfitCard(Container):
                     duration=150,
                     curve=AnimationCurve.EASE_OUT_BACK,
                 ),
+                on_click=on_click,
                 on_hover=self.on_card_hover,
                 on_tap_down=self.on_card_tap,
             )
@@ -70,6 +71,7 @@ class OutfitCard(Container):
                 ),
                 on_hover=self.on_card_hover,
                 on_tap_down=self.on_card_tap,
+                on_click=on_click
             )
         elif (len(outfit.cloth_list) == 2):
             super().__init__(
@@ -104,6 +106,7 @@ class OutfitCard(Container):
                 ),
                 on_hover=self.on_card_hover,
                 on_tap_down=self.on_card_tap,
+                on_click=on_click
             )
         elif (len(outfit.cloth_list) == 3):
             super().__init__(
@@ -146,6 +149,7 @@ class OutfitCard(Container):
                 ),
                 on_hover=self.on_card_hover,
                 on_tap_down=self.on_card_tap,
+                on_click=on_click
             )
         else:
             super().__init__(
@@ -196,6 +200,7 @@ class OutfitCard(Container):
                 ),
                 on_hover=self.on_card_hover,
                 on_tap_down=self.on_card_tap,
+                on_click=on_click
             )
 
     def on_card_hover(self, e):

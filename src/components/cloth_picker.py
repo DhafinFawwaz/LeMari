@@ -157,6 +157,11 @@ class ClothPicker(Container):
     def get_selected_cloths(self):
         return self.selected_cloth_list
 
+    def set_chosen_cloth(self, cloth_list: List[Cloth]):
+        self.selected_cloth_list.clear()
+        for cloth in cloth_list:
+            self.selected_cloth_list.append(cloth)
+
     def toggle_cloth(self, cloth: Cloth):
         # check if cloth already exist in selected cloth list
         idx: int = -1
@@ -194,8 +199,8 @@ class ClothPicker(Container):
         self.update_cloth_card_list()
         super().update()
 
-    def __init__(self):
-        self.selected_cloth_list: List[Cloth] = []
+    def __init__(self, initial_cloth_list: List[Cloth] = []):
+        self.selected_cloth_list: List[Cloth] = initial_cloth_list
         self.cloth_list = Cloth.get_all()
         self.cloth_card_list = []
         self.update_cloth_card_list()

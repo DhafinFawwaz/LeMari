@@ -54,7 +54,7 @@ ORDER BY cloth.name
 
     def tag_list_from_json(tag_json: str) -> List[Tag]:
         loaded = json.loads(tag_json)
-        return [Tag(name=loaded_tag['name'], id=loaded_tag['id']) for loaded_tag in loaded]
+        return [Tag(name=loaded_tag['name'], id=loaded_tag['id']) for loaded_tag in loaded if loaded_tag['id'] != None]
         
 
     def find_all_by_search_and_tags(search_filter: str, tag_list_filter: List[Tag]) -> List["Cloth"]:
