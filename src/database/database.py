@@ -33,6 +33,7 @@ class DB:
 
 
         DB.conn = connect(DB.db_path, check_same_thread=False)
+        DB.conn.execute("PRAGMA foreign_keys = ON")
         DB.cursor = DB.conn.cursor()
         DB.create_tables()
         DB.is_initialized = True
@@ -72,7 +73,7 @@ CREATE TABLE IF NOT EXISTS cloth_tag (
     cloth_id INTEGER,
     tag_id INTEGER, 
     FOREIGN KEY (cloth_id) REFERENCES cloth(id),
-    FOREIGN KEY (tag_id) REFERENCES tag(id)
+    FOREIGN KEY (tag_id) REFERENCES tag(id) ON DELETE RESTRICT 
 );
         """)
         DB.cursor.execute("""

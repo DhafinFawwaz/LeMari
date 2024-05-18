@@ -12,7 +12,7 @@ class Tag:
         return str((self.id, self.name))
 
     def save(self):
-        cursor = DB.execute("INSERT INTO tag (name) VALUES (?)", (self.name,))
+        cursor = DB.execute("INSERT INTO tag (name) VALUES (?)", (self.name.strip(),))
         self.id = cursor.lastrowid
 
     def delete(self):
@@ -20,12 +20,13 @@ class Tag:
 
     def update(self,name:str):
         self.name = name
-        cursor = DB.execute("UPDATE tag SET name = ? WHERE id = ?", (self.name,self.id))
+        cursor = DB.execute("UPDATE tag SET name = ? WHERE id = ?", (self.name.strip(),self.id))
 
     def get_all() -> List["Tag"]:
         cursor: Cursor = DB.execute("SELECT * FROM tag")
         res = cursor.fetchall()
         tag_list: List[Tag] = []
         for row in res:
-            tag_list.append(Tag(name=row[1], id=row[0]))
+            print(row)
+            tag_list.append(Tag(name=row[1].strip(), id=row[0]))
         return tag_list
