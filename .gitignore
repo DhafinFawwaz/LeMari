@@ -13,3 +13,8 @@
 
 coverage/*
 !coverage/.gitkeep 
+
+build/
+dist/
+*.spec
+bin/

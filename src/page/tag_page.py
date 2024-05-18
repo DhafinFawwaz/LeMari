@@ -16,19 +16,17 @@ class PillTag(Row):
         self.background = NiceButton(
             text=tag.name,
             on_click=on_click,
-            bgcolor=ft.colors.WHITE,
+            bgcolor=Themes.slate950,
             overlay_scale=Themes.scalemd,
             tap_scale=Themes.scalesm,
-            text_color=ft.colors.BLACK,
+            text_color=Themes.slate50,
+            text_overlay_color=Themes.slate950,
+            bg_overlay_color=Themes.slate200,
         )
         super().__init__(
             [self.background],
             tight=True
         )
-
-    def hover_handler(self, e):
-        e.control.bgcolor = "blue" if e.data else ft.colors.WHITE
-        e.control.update()
 
 
 class TagPage(Stack):
@@ -195,7 +193,7 @@ class TagPage(Stack):
                 ),
                 Container(
                     content=NiceButton(
-                        "Add Cloth",
+                        "Add Tag",
                         Icon(
                             ft.icons.ADD,
                             Themes.slate50,

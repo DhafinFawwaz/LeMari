@@ -55,7 +55,6 @@ class Dialog(Container):
             controls=bottom_controls,
             alignment=MainAxisAlignment.END,
         )
-        self.dialog_content.content = content
         self.title_text = StyledText(title, color=Themes.slate950, weight=800, size=25)
         self.background = Container(
             expand=True,

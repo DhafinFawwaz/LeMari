@@ -33,5 +33,5 @@ unit-test:
 deploy:
   stage: deploy
   script:
-    - flet pack src/main.py
+    - flet pack src/main.py --name LeMari --add-data src/assets/font/*.ttf:assets/font
   environment: production

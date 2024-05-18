@@ -52,8 +52,10 @@ class NormalButton(ElevatedButton):
         self.bg_overlay_color = bg_overlay_color
         self.text_overlay_color = text_overlay_color
         self.text_color = text_color
+        self.style_disabled = False
 
     def on_button_hover(self, e):
+        if self.style_disabled: return
         if e.data == "true":
             self.text_content.color = self.text_overlay_color
             if self.icon_content: self.icon_content.color = self.text_overlay_color
