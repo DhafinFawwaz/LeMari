@@ -21,15 +21,15 @@ class TestOutfit:
         DB.execute(f"INSERT INTO cloth (name, image_name) VALUES (?, ?), (?, ?), (?, ?)", (cloth_name_1, f"{cloth_name_1}.png", cloth_name_2, f"{cloth_name_2}.png", cloth_name_3, f"{cloth_name_3}.png"))
         cursor: Cursor = DB.execute(f"SELECT * FROM cloth WHERE name = ?", (cloth_name_1,))
         res = cursor.fetchall()
-        cloth_1 = Cloth(name=res[0][1], image_name=res[0][2], id=res[0][0])
+        cloth_1 = Cloth(name=res[0][1], image_name=res[0][2], id=res[0][0], tag_list=[])
 
         cursor: Cursor = DB.execute(f"SELECT * FROM cloth WHERE name = ?", (cloth_name_2,))
         res = cursor.fetchall()
-        cloth_2 = Cloth(name=res[0][1], image_name=res[0][2], id=res[0][0])
+        cloth_2 = Cloth(name=res[0][1], image_name=res[0][2], id=res[0][0], tag_list=[])
 
         cursor: Cursor = DB.execute(f"SELECT * FROM cloth WHERE name = ?", (cloth_name_3,))
         res = cursor.fetchall()
-        cloth_3 = Cloth(name=res[0][1], image_name=res[0][2], id=res[0][0])
+        cloth_3 = Cloth(name=res[0][1], image_name=res[0][2], id=res[0][0], tag_list=[])
 
         return prefix_1, prefix_2, prefix_3, cloth_1, cloth_2, cloth_3
 

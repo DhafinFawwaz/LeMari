@@ -72,8 +72,11 @@ class TestTag:
         tag_3.save()
 
         tag_1.name = "tag1"
+        tag_1.update()
         tag_2.name = "tag2"
+        tag_2.update()
         tag_3.name = "tag3"
+        tag_3.update()
 
         # Get all
         tag_list = Tag.get_all()
