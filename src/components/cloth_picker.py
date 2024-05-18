@@ -7,6 +7,7 @@ from theme.themes import Themes
 from typing import Optional, List, Callable
 from flet_core.form_field_control import FormFieldControl, InputBorder
 from flet_core.control_event import ControlEvent
+from components.tag_picker import TagPicker
 from database.tag import Tag
 from database.cloth import Cloth
 from database.outfit import Outfit
@@ -178,7 +179,7 @@ class ClothPicker(Container):
             self.selected_cloth_list.pop(idx)
 
     def update_cloth_card_list(self):
-        self.cloth_list = Cloth.get_all()
+        self.cloth_list = Cloth.find_all_by_search_and_tags("", self.search_bar_tag_picker.choosen_tags)
         self.cloth_card_list = []
 
         for cloth in self.cloth_list:
@@ -194,6 +195,8 @@ class ClothPicker(Container):
             else:
                 self.cloth_card_list.append(ClothButton(
                     cloth=cloth, selected=False, invoke_func=lambda e, cloth=cloth: self.toggle_cloth(cloth)))
+        self.cloth_list_row.controls = self.cloth_card_list
+        self.cloth_list_row.update()
 
     def update(self):
         self.update_cloth_card_list()
@@ -203,18 +206,31 @@ class ClothPicker(Container):
         self.selected_cloth_list: List[Cloth] = initial_cloth_list
         self.cloth_list = Cloth.get_all()
         self.cloth_card_list = []
-        self.update_cloth_card_list()
+        for cloth in self.cloth_list:
+            # search for cloth in selected cloth list
+            found: bool = False
+            for selected_cloth in self.selected_cloth_list:
+                if selected_cloth.id == cloth.id:
+                    found = True
+                    break
+            if found:
+                self.cloth_card_list.append(ClothButton(
+                    cloth=cloth, selected=True, invoke_func=lambda e, cloth=cloth: self.toggle_cloth(cloth)))
+            else:
+                self.cloth_card_list.append(ClothButton(
+                    cloth=cloth, selected=False, invoke_func=lambda e, cloth=cloth: self.toggle_cloth(cloth)))
+        self.search_bar_tag_picker = TagPicker(on_change=lambda e: self.update_cloth_card_list())
+        self.cloth_list_row = Row(
+            controls=self.cloth_card_list,
+            spacing=10,
+            run_spacing=10,
+            wrap=True
+        )
         super().__init__(
             content=Column(
                 controls=[
-                    Container(
-                        content=Row(
-                            controls=self.cloth_card_list,
-                            spacing=10,
-                            run_spacing=10,
-                            wrap=True
-                        )
-                    )
+                    self.search_bar_tag_picker,
+                    self.cloth_list_row
                 ],
             ),
         )
