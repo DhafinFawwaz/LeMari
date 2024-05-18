@@ -110,6 +110,6 @@ class TestOutfit:
 
         assert any([x.name == f"{prefix_1}"] for x in outfit_list)
         assert any([x.name == f"{prefix_3}"] for x in outfit_list)
-        assert all([not (x.name == f"{prefix_3}")] for x in outfit_list)
+        assert all([x.name != f"{prefix_2}"] for x in outfit_list)
 
         self.clean_up(outfit_1, outfit_2, outfit_3, cloth_1, cloth_2, cloth_3)

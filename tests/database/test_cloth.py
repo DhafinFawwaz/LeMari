@@ -35,10 +35,13 @@ class TestCloth:
 
         return prefix_1, prefix_2, prefix_3, tag_1, tag_2, tag_3
     
-    def clean_up(self, prefix_1: str, prefix_2: str, prefix_3: str, tag_name_1: str, tag_name_2: str, tag_name_3: str):
-        DB.execute("DELETE FROM cloth WHERE name = ?", (f'{prefix_1}',))
-        DB.execute("DELETE FROM cloth WHERE name = ?", (f'{prefix_2}',))
-        DB.execute("DELETE FROM cloth WHERE name = ?", (f'{prefix_3}',))
+    def clean_up(self, prefix_1: Cloth, prefix_2: Cloth, prefix_3: Cloth, tag_name_1: str, tag_name_2: str, tag_name_3: str):
+        DB.execute("DELETE FROM cloth_tag WHERE cloth_id = ?", (prefix_1.id,))
+        DB.execute("DELETE FROM cloth WHERE name = ?", (prefix_1.name,))
+        DB.execute("DELETE FROM cloth_tag WHERE cloth_id = ?", (prefix_2.id,))
+        DB.execute("DELETE FROM cloth WHERE name = ?", (prefix_2.name,))
+        DB.execute("DELETE FROM cloth_tag WHERE cloth_id = ?", (prefix_3.id,))
+        DB.execute("DELETE FROM cloth WHERE name = ?", (prefix_3.name,))
         
         DB.execute("DELETE FROM tag WHERE name = ?", (tag_name_1,))
         DB.execute("DELETE FROM tag WHERE name = ?", (tag_name_2,))
@@ -66,7 +69,7 @@ class TestCloth:
         assert any([x.name == f'{prefix_3}' and x.image_name == f'{prefix_3}.png' for x in cloth_list])
         
         # Clean up
-        self.clean_up(prefix_1, prefix_2, prefix_3, tag_1.name, tag_2.name, tag_3.name)
+        self.clean_up(cloth_1, cloth_2, cloth_3, tag_1.name, tag_2.name, tag_3.name)
         
 
     def test_find_all_by_search_and_tags(self):
@@ -93,7 +96,7 @@ class TestCloth:
         assert all([not (x.name == f'{prefix_3}' and x.image_name == f'{prefix_3}.png') for x in cloth_list])
         
         # Clean up
-        self.clean_up(prefix_1, prefix_2, prefix_3, tag_1.name, tag_2.name, tag_3.name)
+        self.clean_up(cloth_1, cloth_2, cloth_3, tag_1.name, tag_2.name, tag_3.name)
     
     def test_edit(self):
         DB.init()
@@ -110,6 +113,7 @@ class TestCloth:
         cloth_1.name = f'{prefix_1}_edited'
         cloth_1.image_name = f'{prefix_1}_edited.png'
         cloth_1.tag_list = [tag_2]
+        cloth_1.edit()
 
         search_filter = ''
         tag_list_filter = [tag_1, tag_3]
@@ -123,7 +127,7 @@ class TestCloth:
         assert all([not (x.name == f'{prefix_1}_edited' and x.image_name == f'{prefix_1}_edited.png') for x in cloth_list])
         
         # Clean up
-        self.clean_up(prefix_1, prefix_2, prefix_3, tag_1.name, tag_2.name, tag_3.name)
+        self.clean_up(cloth_1, cloth_2, cloth_3, tag_1.name, tag_2.name, tag_3.name)
 
     def test_delete(self):
         DB.init()
@@ -149,5 +153,5 @@ class TestCloth:
         assert all([not (x.name == f'{prefix_2}' and x.image_name == f'{prefix_2}.png') for x in cloth_list])
         
         # Clean up
-        self.clean_up(prefix_1, prefix_2, prefix_3, tag_1.name, tag_2.name, tag_3.name)
+        self.clean_up(cloth_1, cloth_2, cloth_3, tag_1.name, tag_2.name, tag_3.name)
 
