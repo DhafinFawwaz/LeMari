@@ -113,7 +113,6 @@ class TagPage(Stack):
         except IntegrityError as e:
             self.show_error_dialog(f"Tag {new_name} already exists")
         except Exception as e:
-            print(str(e))
             self.show_error_dialog(str(e))
 
     def delete_handler(self, tag: Tag):
@@ -128,7 +127,6 @@ class TagPage(Stack):
         except IntegrityError as e:
             self.show_error_dialog(f"Tag {tag.name} is being used")
         except Exception as e:
-            print(str(e))
             self.show_error_dialog(str(e))
 
     def on_change_edit(self, e):
