@@ -9,6 +9,7 @@ from components.nice_button import NiceButton
 from components.styled_search_bar import StyledSearchBar
 from database.tag import Tag
 from typing import List
+from sqlite3 import IntegrityError
 
 
 class PillTag(Row):
@@ -46,10 +47,16 @@ class TagPage(Stack):
         self.string_tag = e
 
     def input_submit_handler(self, e):
-        if (self.string_tag is not None) and (len(self.string_tag) > 0) and not (
-                self.string_tag.strip() in Tag.get_all()):
-            print(e)
-            new_tag = Tag(self.string_tag.strip())
+        try:
+            if self.string_tag is None or len(self.string_tag) == 0:
+                raise Exception("Please fill the tag name")
+            
+            tag_name = self.string_tag.strip()
+            tag_name_list = [tag.name for tag in Tag.get_all()]
+            if tag_name in tag_name_list:
+                raise Exception(f"Tag with name {tag_name} already exists")
+            
+            new_tag = Tag(tag_name)
             new_tag.save()
             self.pills.controls.clear()
             self.pills.controls = [
@@ -57,12 +64,10 @@ class TagPage(Stack):
                 Tag.get_all()]
             self.update()
             self.main_dialog.close()
-        elif self.string_tag is None or len(self.string_tag) == 0:
-            self.show_error_dialog("Input gabole kosong yak 😎")
-        elif self.string_tag.strip() in Tag.get_all():
-            self.show_error_dialog(f"{e} sudah ada")
-        else:
-            self.show_error_dialog("error mas")
+            self.string_tag = ""
+            
+        except Exception as e:
+            self.show_error_dialog(str(e))
 
     def show_add_dialog(self, e):
         self.main_dialog.show(
@@ -94,19 +99,23 @@ class TagPage(Stack):
         )
 
     def show_error_dialog(self, message):
-        self.error_dialog.show(title="ERROR", content=StyledText(str(message), 16))
+        self.error_dialog.show(title="Oops!", content=StyledText(str(message), 16))
 
     def edit_handler(self, tag: Tag, new_name):
-        tag.update(new_name)
-        self.pills.controls.clear()
-        self.pills.controls = [
-            PillTag(tagz, on_click=lambda e: self.show_edit_dialog(e, tagz)) for tagz in
-            Tag.get_all()]
-        self.update()
-        self.main_dialog.close()
+        try:
+            tag.update(new_name)
+            self.pills.controls.clear()
+            self.pills.controls = [
+                PillTag(tagz, on_click=lambda e: self.show_edit_dialog(e, tagz)) for tagz in
+                Tag.get_all()]
+            self.update()
+            self.main_dialog.close()
+        except IntegrityError as e:
+            self.show_error_dialog(f"Tag {new_name} already exists")
+        except Exception as e:
+            self.show_error_dialog(str(e))
 
     def delete_handler(self, tag: Tag):
-        print(f"Deleting {tag}")
         try:
             tag.delete()
             self.pills.controls.clear()
@@ -115,8 +124,10 @@ class TagPage(Stack):
                 Tag.get_all()]
             self.update()
             self.main_dialog.close()
-        except:
-            self.show_error_dialog(f"{tag.name} sedang digunakan")
+        except IntegrityError as e:
+            self.show_error_dialog(f"Tag {tag.name} is being used")
+        except Exception as e:
+            self.show_error_dialog(str(e))
 
     def on_change_edit(self, e):
         self.current_change = e
@@ -128,7 +139,7 @@ class TagPage(Stack):
                 controls=[
                     StyledTextField(
                         placeholder=tag.name,
-                        on_change=lambda e: self.on_change_edit(e, self.current_change),
+                        on_change=self.on_change_edit,
                     )
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,

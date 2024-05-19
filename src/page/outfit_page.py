@@ -17,38 +17,46 @@ from components.image_picker import ImagePicker
 from components.outfitcard import OutfitCard
 from components.cloth_picker import ClothPicker
 from typing import List
-
+from sqlite3 import IntegrityError
 
 class OutfitPage(Container):
     def on_add_outfit(self, e):
         try:
-            new_outfit = Outfit(self.outfit_name_field.value, self.cloth_picker.get_selected_cloths())
+            cloth_list = self.cloth_picker.get_selected_cloths()
+            if len(cloth_list) == 0:
+                raise Exception("Please select at least one cloth")
+            
+            new_outfit = Outfit(self.outfit_name_field.value, cloth_list)
             new_outfit.save()
             self.back(e)
+        except IntegrityError as e:
+            self.insert_error_dialog.show("Oops!", StyledText(f"Outfit {new_outfit.name} already exist", 16))
         except Exception as e:
-            self.back(e)
-            print(str(e))
+            self.insert_error_dialog.show("Oops!", StyledText(str(e), 16))
 
     def on_edit_outfit(self, e):
         try:
+            cloth_list = self.cloth_picker.get_selected_cloths()
+            if len(cloth_list) == 0:
+                raise Exception("Please select at least one cloth")
+            
             self.current_outfit.name = self.outfit_name_field.value
-            self.current_outfit.cloth_list = self.cloth_picker.get_selected_cloths()
+            self.current_outfit.cloth_list = cloth_list
             self.current_outfit.edit()
             self.back(e)
 
+        except IntegrityError as e:
+            self.edit_error_dialog.show("Oops!", StyledText(f"Outfit {self.current_outfit.name} already exist", 16))
         except Exception as e:
-            self.back(e)
-            print(str(e))
-            pass
+            self.edit_error_dialog.show("Oops!", StyledText(str(e), 16))
 
     def on_delete_outfit(self, e):
         try:
             self.current_outfit.delete()
             self.back(e)
         except Exception as e:
-            # self.error_dialog.show("Error", StyledText(str(e), 16))
-            self.back(e)
-            print(str(e))
+            self.edit_error_dialog.show("Oops!", StyledText(str(e), 16))
+
     
     def show_edit_page(self, e):
         self.detail_dialog.close()
@@ -100,6 +108,8 @@ class OutfitPage(Container):
                         ]
                     )
                 ),
+            
+                self.edit_error_dialog
             ],
             expand=True
         )
@@ -152,6 +162,8 @@ class OutfitPage(Container):
                         ]
                     )
                 ),
+            
+                self.insert_error_dialog
             ],
             expand=True
         )
@@ -269,6 +281,9 @@ class OutfitPage(Container):
         )
 
         self.edit_outfit_page = None
+
+        self.insert_error_dialog = ErrorDialog()
+        self.edit_error_dialog = ErrorDialog()
 
         super().__init__(
             margin=margin.all(0),
