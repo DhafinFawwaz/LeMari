@@ -1,4 +1,4 @@
-from flet import Text, Page
+from flet import Text, Page, TextAlign
 from theme.themes import Themes
 
 class StyledText(Text):
@@ -15,7 +15,7 @@ class StyledText(Text):
             "Outfit-Black": "./font/Outfit-Black.ttf",
         }
 
-    def __init__(self, value: str, size: int = 14, color: str = Themes.slate950, weight: int = 700):
+    def __init__(self, value: str, size: int = 14, color: str = Themes.slate950, weight: int = 700, text_align: str = None):
         font_family = ""
         if weight < 200: font_family = "Outfit-Thin"
         elif weight < 300: font_family = "Outfit-ExtraLight"
@@ -26,4 +26,4 @@ class StyledText(Text):
         elif weight < 800: font_family = "Outfit-Bold"
         elif weight < 900: font_family = "Outfit-ExtraBold"
         else: font_family = "Outfit-Black"
-        super().__init__(value=value, size=size, color=color, font_family=font_family)
+        super().__init__(value=value, size=size, color=color, font_family=font_family, text_align=text_align)
