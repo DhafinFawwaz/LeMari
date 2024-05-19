@@ -37,14 +37,6 @@ class DB:
         DB.cursor = DB.conn.cursor()
         DB.create_tables()
         DB.is_initialized = True
-
-        # Tells that if seeding have been done before
-        # if not yet, go seed.
-        one_of_the_seed_image = DB.get_image_path("red-jeans.png")
-        if (not os.path.exists(one_of_the_seed_image)):
-            seeder = Seeder()
-            seeder.seed()
-        
         
 
     def create_tables():
