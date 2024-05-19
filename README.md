@@ -50,7 +50,7 @@ disini.
 ## 🏃🏻‍♂️ Cara Menjalankan Proyek
 ### Aplikasi/Build
 1. Download executable dari release [Releases](https://gitlab.informatika.org/raflyhangga/if2250-2024-k02-05-le-mari/-/releases)
-2. Klik link untuk executable versi terbaru, misalnya [Le Mari v1.0.1](https://drive.google.com/drive/folders/1q443BoqUO60iG067gRZ2NkuPIxpopvCf?usp=drive_link)
+2. Klik link untuk executable versi terbaru, misalnya [Le Mari v1.0.2](https://drive.google.com/drive/folders/12TPyhd-6h3hgQA9ofeqsyoDVfLQi1Nhe)
 3. Setelah dialihkan ke Google Drive, download executable di Google Drive tersebut.
 4. Double click file `.exe` yang telah didownload.
 5. Jika menggunakan sistem operasi Windows bisa jadi akan muncul pop up windows protection, klik `More Info` <br> ![more_info.png](doc/more_info.png)
