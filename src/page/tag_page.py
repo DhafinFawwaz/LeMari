@@ -107,7 +107,7 @@ class TagPage(Stack):
 
     def edit_handler(self, tag: Tag, new_name):
         try:
-            if len(new_name) != 0:
+            if len(new_name.strip()) != 0:
                 tag.update(new_name)
                 self.pills.controls.clear()
                 self.pills.controls = [
