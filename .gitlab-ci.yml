@@ -1,0 +1,37 @@
+image: python:3.11
+
+stages:
+  - setup
+  - test
+  - deploy
+
+before_script:
+  - python --version ; pip --version  # For debugging
+  - pip install virtualenv
+  - python -m virtualenv venv
+  - dir
+  - venv\Scripts\Activate.ps1
+  - pip install -r requirements.txt
+
+setup:
+  stage: setup
+  script:
+    - pip install python-dateutil
+    - pip install -r requirements.txt  # Assuming all dependencies are listed here
+
+unit-test:
+  stage: test
+  script:
+    - echo "Virtual environment activated"
+    - pip list  # Check if dateutil is installed
+    - pytest --cov=src --cov-report=html
+  artifacts:
+    paths:
+      - coverage
+    expire_in: 1 week
+
+deploy:
+  stage: deploy
+  script:
+    - flet pack src/main.py --name LeMari --add-data src/assets/font/*.ttf:assets/font src/assets/image/*.png:assets/image --icon src/assets/image/favicon.ico
+  environment: production
