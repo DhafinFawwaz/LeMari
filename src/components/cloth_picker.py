@@ -1,5 +1,5 @@
 from flet import Container, Image, ImageFit, Animation, AnimationCurve, Stack, Icon, icons, alignment, margin, padding, Column, ResponsiveRow, GridView, Row, TextField, ClipBehavior, CrossAxisAlignment, ScrollMode, StackFit, SearchBar, CircleBorder, Stack, border, Border, BorderSide, colors
-from flet_core import RoundedRectangleBorder, BorderSide, TextStyle, ListTile, Text, ListView
+from flet_core import RoundedRectangleBorder, BorderSide, TextStyle, ListTile, Text, ListView, MainAxisAlignment
 from components.small_button import SmallButton
 from components.styled_text import StyledText
 from components.styled_search_bar import StyledSearchBar
@@ -230,7 +230,9 @@ class ClothPicker(Container):
             controls=self.cloth_card_list,
             spacing=10,
             run_spacing=10,
-            wrap=True
+            wrap=True,
+            alignment=MainAxisAlignment.START,
+            vertical_alignment=CrossAxisAlignment.START,
         )
         super().__init__(
             content=Column(

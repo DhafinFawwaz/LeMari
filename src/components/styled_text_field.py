@@ -34,18 +34,39 @@ class StyledTextField(Container):
         prefix_icon: Icon = None,
         placeholder: str= "Search",
         focused_border_width=2,
-        on_change=None
+        on_change=None,
+        initial_value: str="",
     ):
         self.focused_border_width = focused_border_width
         self.on_change = on_change
-        self.value = ""
+        self.value = initial_value
         self.placeholder = placeholder
         self.placeholder_text = Text(
             size=text_size,
             style=TextStyle(font_family="Outfit-SemiBold"),
             color=Themes.slate400,
             expand=True,
-            value=placeholder
+            value=placeholder if initial_value == "" else "",
+        )
+
+        self.text_content = TextField(
+            text_size=text_size,
+            cursor_color=Themes.slate950,
+            bgcolor=colors.TRANSPARENT,
+            focused_bgcolor=colors.TRANSPARENT,
+            focused_color=Themes.slate950,
+            border_color=colors.TRANSPARENT,
+            focused_border_color=colors.TRANSPARENT,
+            height=height,
+            cursor_height=text_size+5,
+            text_style=TextStyle(font_family="Outfit-Bold"),
+            color=Themes.slate500,
+            selection_color=Themes.indigo600,
+            on_focus=self.on_text_focus,
+            on_blur=self.on_text_blur,
+            expand=True,
+            on_change=self.on_text_change,
+            value=initial_value,
         )
 
         self.stack_controls = [
@@ -62,24 +83,7 @@ class StyledTextField(Container):
             ),
 
             Container(
-                content=TextField(
-                    text_size=text_size,
-                    cursor_color=Themes.slate950,
-                    bgcolor=colors.TRANSPARENT,
-                    focused_bgcolor=colors.TRANSPARENT,
-                    focused_color=Themes.slate950,
-                    border_color=colors.TRANSPARENT,
-                    focused_border_color=colors.TRANSPARENT,
-                    height=height,
-                    cursor_height=text_size+5,
-                    text_style=TextStyle(font_family="Outfit-Bold"),
-                    color=Themes.slate500,
-                    selection_color=Themes.indigo600,
-                    on_focus=self.on_text_focus,
-                    on_blur=self.on_text_blur,
-                    expand=True,
-                    on_change=self.on_text_change,
-                ),
+                content=self.text_content,
                 top=-4,
                 left=45,
             ),
@@ -108,3 +112,5 @@ class StyledTextField(Container):
             ),
         ),
         
+    def focus(self):
+        self.text_content.focus()

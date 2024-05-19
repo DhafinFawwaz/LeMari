@@ -61,7 +61,7 @@ class OutfitPage(Container):
     def show_edit_page(self, e):
         self.detail_dialog.close()
         self.outfit_name_field = StyledTextField(
-            "Outfit Name", placeholder=self.current_outfit.name)
+            "Outfit Name", placeholder=self.current_outfit.name, initial_value=self.current_outfit.name)
         self.outfit_name_field.value = self.current_outfit.name
         self.cloth_picker = ClothPicker(self.current_outfit.cloth_list)
         self.edit_outfit_page = Stack(
@@ -115,6 +115,7 @@ class OutfitPage(Container):
         )
         self.content = self.edit_outfit_page
         super().update()
+        self.outfit_name_field.focus()
 
     def show_insert_page(self, e):
         self.outfit_name_field = StyledTextField(
@@ -191,7 +192,8 @@ class OutfitPage(Container):
                 controls=[
                     self.cloth_list_row
                 ],
-                expand=True
+                expand=True,
+                scroll=ScrollMode.ADAPTIVE
             ),
             [
                 NiceButton("Edit Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.show_edit_page,
