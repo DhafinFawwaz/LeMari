@@ -1,4 +1,4 @@
-from flet import Container, Stack, Icon, icons, alignment, margin, padding, Column, ResponsiveRow, GridView, Row, TextField, InputBorder, MainAxisAlignment, CrossAxisAlignment, ScrollMode, FilePicker, Switch, IconButton
+from flet import Container, Stack, Icon, icons, alignment, margin, padding, Column, ResponsiveRow, GridView, Row, TextField, InputBorder, MainAxisAlignment, CrossAxisAlignment, ScrollMode, FilePicker, Switch, IconButton, TextField
 from components.nice_button import NiceButton
 from components.dialog import Dialog
 from components.styled_text import StyledText
@@ -24,10 +24,9 @@ class OutfitPage(Container):
         try:
             new_outfit = Outfit(self.outfit_name_field.value, self.cloth_picker.get_selected_cloths())
             new_outfit.save()
-            self.main_dialog.close()
-            self.update()
+            self.back(e)
         except Exception as e:
-            self.main_dialog.close()
+            self.back(e)
             print(str(e))
 
     def on_edit_outfit(self, e):
@@ -69,7 +68,6 @@ class OutfitPage(Container):
                                            icon_size=20, tooltip="Back", on_click=self.back),
                                 StyledText("Edit Outfit", 20, weight=800)
                             ]),
-                            self.outfit_name_field,
                             self.cloth_picker
                         ],
                         expand=True
@@ -78,13 +76,18 @@ class OutfitPage(Container):
                 Container(
                     content=Row(
                         controls=[
+                            Container(
+                                content=self.outfit_name_field,
+                                width=300
+                            ),
                             NiceButton("Delete Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_delete_outfit,
                                        bgcolor=Themes.rose600, bg_overlay_color=Themes.rose500, text_color=Themes.slate50),
                             NiceButton("Edit Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_edit_outfit,
                                        bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
                         ]
                     ),
-                    right=0, bottom=0,
+                    right=0, 
+                    bottom=0,
                     margin=margin.all(15),
                 ),
             ],
@@ -93,27 +96,47 @@ class OutfitPage(Container):
         self.content = self.edit_outfit_page
         super().update()
 
-    def show_insert_dialog(self, e):
+    def show_insert_page(self, e):
         self.outfit_name_field = StyledTextField(
             "Outfit Name", placeholder="Enter Outfit Name")
         self.cloth_picker = ClothPicker()
-        self.main_dialog.show("Insert Outfit",
-                              Column(
-                                  spacing=5,
-                                  controls=[
-                                      StyledText("Outfit Name", 13),
-                                      self.outfit_name_field,
-                                      Container(height=7),
-                                      self.cloth_picker
-                                  ],
-                                  scroll=ScrollMode.ADAPTIVE,
-                                  expand=True
-                              ),
-                              [
-                                  NiceButton("Insert Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_add_outfit,
-                                             bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
-                              ]
+        self.edit_outfit_page = Stack(
+            controls=[
+                Container(
+                    padding=padding.all(15),
+                    content=Column(
+                        scroll=ScrollMode.ADAPTIVE,
+                        controls=[
+                            Row(controls=[
+                                IconButton(icons.ARROW_BACK, icon_color=Themes.slate500,
+                                           icon_size=20, tooltip="Back", on_click=self.back),
+                                StyledText("Insert Outfit", 20, weight=800)
+                            ]),
+                            self.cloth_picker
+                        ],
+                        expand=True
+                    )
+                ),
+                Container(
+                    content=Row(
+                        controls=[
+                            Container(
+                                content=self.outfit_name_field,
+                                width=300
+                            ),
+                            NiceButton("Insert Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_add_outfit,
+                                       bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
+                        ]
+                    ),
+                    right=0, 
+                    bottom=0,
+                    margin=margin.all(15),
+                ),
+            ],
+            expand=True
         )
+        self.content = self.edit_outfit_page
+        super().update()
 
     def back(self, e):
         self.content = self.main_page
@@ -183,21 +206,14 @@ class OutfitPage(Container):
             controls=self.outfit_card_list,
             wrap=True
         )
-        self.main_dialog = Dialog(title="Insert Outfit",
-                                  bottom_controls=[
-                                      NiceButton("Insert Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_add_outfit,
-                                                 bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
-                                  ],
-                                  margin=margin.symmetric(60, 170),
-                                  )
-
-        self.detail_dialog = Dialog(title="Outfit Detail",
-                                    bottom_controls=[
-                                        NiceButton("Edit Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_edit_outfit,
-                                                   bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
-                                    ],
-                                    margin=margin.symmetric(60, 170),
-                                    )
+        self.detail_dialog = Dialog(
+            title="Outfit Detail",
+            bottom_controls=[
+                NiceButton("Edit Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_edit_outfit,
+                    bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
+            ],
+            margin=margin.symmetric(60, 170),
+        )
 
         self.current_search = ""
         self.current_outfit = None
@@ -222,12 +238,11 @@ class OutfitPage(Container):
                     )
                 ),
                 Container(
-                    content=NiceButton("Add Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.show_insert_dialog,
+                    content=NiceButton("Add Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.show_insert_page,
                                        bgcolor=Themes.rose600, bg_overlay_color=Themes.rose500, text_color=Themes.slate50),
                     right=0, bottom=0,
                     margin=margin.all(15),
                 ),
-                self.main_dialog,
                 self.detail_dialog
             ],
             expand=True
