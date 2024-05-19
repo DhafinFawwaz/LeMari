@@ -108,6 +108,8 @@ class TagPage(Stack):
     def edit_handler(self, tag: Tag, new_name):
         try:
             if len(new_name.strip()) != 0:
+                if new_name in [tag.name for tag in Tag.get_all()]:
+                    raise Exception(f"Tag with name {new_name} already exists")
                 tag.update(new_name)
                 self.pills.controls.clear()
                 self.pills.controls = [
@@ -143,6 +145,8 @@ class TagPage(Stack):
         self.current_change = e
 
     def show_edit_dialog(self, e, tag: Tag):
+        # self.current_change.clear()
+        self.current_change = tag.name
         text_field = StyledTextField(
             placeholder=tag.name,
             initial_value=tag.name,
