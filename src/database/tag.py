@@ -27,6 +27,5 @@ class Tag:
         res = cursor.fetchall()
         tag_list: List[Tag] = []
         for row in res:
-            print(row)
             tag_list.append(Tag(name=row[1].strip(), id=row[0]))
         return tag_list
