@@ -87,7 +87,7 @@ class OutfitPage(Container):
                                                 content=self.outfit_name_field,
                                                 expand=True
                                             ),
-                                            NiceButton("Delete Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_delete_outfit,
+                                            NiceButton("Delete Outfit", Icon(icons.DELETE, Themes.slate50, size=21), on_click=self.on_delete_outfit,
                                                 bgcolor=Themes.rose600, bg_overlay_color=Themes.rose500, text_color=Themes.slate50),
                                             NiceButton("Edit Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_edit_outfit,
                                                 bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)

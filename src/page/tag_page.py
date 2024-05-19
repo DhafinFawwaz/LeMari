@@ -107,14 +107,19 @@ class TagPage(Stack):
 
     def edit_handler(self, tag: Tag, new_name):
         try:
-            tag.update(new_name)
-            self.pills.controls.clear()
-            self.pills.controls = [
-                PillTag(tagz, on_click=lambda e: self.show_edit_dialog(e, tagz)) for tagz in
-                Tag.get_all()]
-            self.update()
-            self.main_dialog.close()
-            self.string_tag = ""
+            if len(new_name.strip()) != 0:
+                if new_name in [tag.name for tag in Tag.get_all()]:
+                    raise Exception(f"Tag with name {new_name} already exists")
+                tag.update(new_name)
+                self.pills.controls.clear()
+                self.pills.controls = [
+                    PillTag(tag, on_click=lambda e, tag=tag: self.show_edit_dialog(e, tag)) for tag in
+                    Tag.get_all()]
+                self.update()
+                self.main_dialog.close()
+                self.string_tag = ""
+            else:
+                self.show_error_dialog(f"Cannot set into an empty tag")
         except IntegrityError as e:
             self.show_error_dialog(f"Tag {new_name} already exists")
         except Exception as e:
@@ -125,7 +130,7 @@ class TagPage(Stack):
             tag.delete()
             self.pills.controls.clear()
             self.pills.controls = [
-                PillTag(tagz, on_click=lambda e,tagz=tagz: self.show_edit_dialog(e, tagz)) for tagz in
+                PillTag(tag, on_click=lambda e, tag=tag: self.show_edit_dialog(e, tag)) for tag in
                 Tag.get_all()]
             self.update()
             self.main_dialog.close()
@@ -136,16 +141,19 @@ class TagPage(Stack):
             self.show_error_dialog(str(e))
 
     def on_change_edit(self, e):
+        print(f"On change: {e}")
         self.current_change = e
 
     def show_edit_dialog(self, e, tag: Tag):
+        # self.current_change.clear()
+        self.current_change = tag.name
         text_field = StyledTextField(
             placeholder=tag.name,
             initial_value=tag.name,
-            on_change=lambda e: self.on_change_edit(e, self.current_change),
+            on_change=self.on_change_edit,
         )
         self.main_dialog.show(
-            title="Edit Tag",
+            title=f"Edit {tag.name} Tag",
             content=Column(
                 controls=[
                     text_field
