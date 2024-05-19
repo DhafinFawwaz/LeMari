@@ -74,6 +74,7 @@ class TagPage(Stack):
         text_field = StyledTextField(
                 placeholder="Insert new tag name",
                 on_change=self.input_change_handler,
+                initial_value=self.string_tag
             )
         self.main_dialog.show(
             title="Add Tag",
@@ -113,6 +114,7 @@ class TagPage(Stack):
                 Tag.get_all()]
             self.update()
             self.main_dialog.close()
+            self.string_tag = ""
         except IntegrityError as e:
             self.show_error_dialog(f"Tag {new_name} already exists")
         except Exception as e:
@@ -127,6 +129,7 @@ class TagPage(Stack):
                 Tag.get_all()]
             self.update()
             self.main_dialog.close()
+            self.string_tag = ""
         except IntegrityError as e:
             self.show_error_dialog(f"Tag {tag.name} is being used")
         except Exception as e:

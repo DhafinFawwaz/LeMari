@@ -22,11 +22,15 @@ from sqlite3 import IntegrityError
 class OutfitPage(Container):
     def on_add_outfit(self, e):
         try:
+            cloth_name = self.outfit_name_field.value
+            if len(cloth_name) == 0:
+                raise Exception("Please enter outfit name")
+            
             cloth_list = self.cloth_picker.get_selected_cloths()
             if len(cloth_list) == 0:
                 raise Exception("Please select at least one cloth")
             
-            new_outfit = Outfit(self.outfit_name_field.value, cloth_list)
+            new_outfit = Outfit(cloth_name, cloth_list)
             new_outfit.save()
             self.back(e)
         except IntegrityError as e:
@@ -36,11 +40,15 @@ class OutfitPage(Container):
 
     def on_edit_outfit(self, e):
         try:
+            cloth_name = self.outfit_name_field.value
+            if len(cloth_name) == 0:
+                raise Exception("Please enter outfit name")
+            
             cloth_list = self.cloth_picker.get_selected_cloths()
             if len(cloth_list) == 0:
                 raise Exception("Please select at least one cloth")
             
-            self.current_outfit.name = self.outfit_name_field.value
+            self.current_outfit.name = cloth_name
             self.current_outfit.cloth_list = cloth_list
             self.current_outfit.edit()
             self.back(e)

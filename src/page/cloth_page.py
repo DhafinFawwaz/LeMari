@@ -15,6 +15,7 @@ from components.small_button import SmallButton
 from components.image_picker import ImagePicker
 import time
 import os
+from sqlite3 import IntegrityError
 
 class ClothPage(Container):
     # Insert cloth in database
@@ -46,9 +47,10 @@ class ClothPage(Container):
             Cloth.save_image(self.image_picker.choosen_image)
             self.main_dialog.close()
             self.update()
+        except IntegrityError as e:
+            self.error_dialog.show("Oops!", StyledText(f"Cloth '{new_cloth.name}' already exists", 16))
         except Exception as e:
             self.error_dialog.show(e.args[0], StyledText(e.args[1], 16))
-            print(str(e))
 
     # Edit cloth in database
     def on_edit_cloth(self, e):
@@ -80,9 +82,10 @@ class ClothPage(Container):
                 Cloth.save_image(self.image_picker.choosen_image)
             self.main_dialog.close()
             self.update()
+        except IntegrityError as e:
+            self.error_dialog.show("Oops!", StyledText(f"Cloth '{self.current_cloth.name}' already exists", 16))
         except Exception as e:
-            self.error_dialog.show(e.args[0], StyledText(e.args[1], 16)) 
-            print(str(e))
+            self.error_dialog.show(e.args[0], StyledText(e.args[1], 16))
             
     # Delete cloth in database
     def on_delete_cloth(self, e):
@@ -90,9 +93,10 @@ class ClothPage(Container):
             self.current_cloth.delete()
             self.update()
             self.main_dialog.close()
+        except IntegrityError as e:
+            self.error_dialog.show("Oops!", StyledText(f"Cloth '{self.current_cloth.name}' is being used in a certain outfit", 16))
         except Exception as e:
-            self.error_dialog.show("Error", StyledText(str(e), 16)) 
-            print(str(e))
+            self.error_dialog.show(e.args[0], StyledText(e.args[1], 16))
 
 
 
