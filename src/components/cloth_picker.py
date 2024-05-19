@@ -11,6 +11,7 @@ from components.tag_picker import TagPicker
 from database.tag import Tag
 from database.cloth import Cloth
 from database.outfit import Outfit
+from components.styled_search_bar import StyledSearchBar
 
 
 class CustomCheckBox(Container):
@@ -179,7 +180,7 @@ class ClothPicker(Container):
             self.selected_cloth_list.pop(idx)
 
     def update_cloth_card_list(self):
-        self.cloth_list = Cloth.find_all_by_search_and_tags("", self.search_bar_tag_picker.choosen_tags)
+        self.cloth_list = Cloth.find_all_by_search_and_tags(self.current_search, self.search_bar_tag_picker.choosen_tags)
         self.cloth_card_list = []
 
         for cloth in self.cloth_list:
@@ -198,6 +199,10 @@ class ClothPicker(Container):
         self.cloth_list_row.controls = self.cloth_card_list
         self.cloth_list_row.update()
 
+    def on_search(self, e):
+        self.current_search = e
+        self.update()
+
     def update(self):
         self.update_cloth_card_list()
         super().update()
@@ -205,6 +210,7 @@ class ClothPicker(Container):
     def __init__(self, initial_cloth_list: List[Cloth] = []):
         self.selected_cloth_list: List[Cloth] = initial_cloth_list
         self.cloth_list = Cloth.get_all()
+        self.current_search = ""
         self.cloth_card_list = []
         for cloth in self.cloth_list:
             # search for cloth in selected cloth list
@@ -231,6 +237,7 @@ class ClothPicker(Container):
         super().__init__(
             content=Column(
                 controls=[
+                    StyledSearchBar(on_change=self.on_search),
                     self.search_bar_tag_picker,
                     self.cloth_list_row
                 ],

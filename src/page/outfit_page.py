@@ -1,4 +1,4 @@
-from flet import Container, Stack, Icon, icons, alignment, margin, padding, Column, ResponsiveRow, GridView, Row, TextField, InputBorder, MainAxisAlignment, CrossAxisAlignment, ScrollMode, FilePicker, Switch, IconButton
+from flet import Container, Stack, Icon, icons, alignment, margin, padding, Column, ResponsiveRow, GridView, Row, TextField, InputBorder, MainAxisAlignment, CrossAxisAlignment, ScrollMode, FilePicker, Switch, IconButton, TextField
 from components.nice_button import NiceButton
 from components.dialog import Dialog
 from components.styled_text import StyledText
@@ -17,39 +17,46 @@ from components.image_picker import ImagePicker
 from components.outfitcard import OutfitCard
 from components.cloth_picker import ClothPicker
 from typing import List
-
+from sqlite3 import IntegrityError
 
 class OutfitPage(Container):
     def on_add_outfit(self, e):
         try:
-            new_outfit = Outfit(self.outfit_name_field.value, self.cloth_picker.get_selected_cloths())
+            cloth_list = self.cloth_picker.get_selected_cloths()
+            if len(cloth_list) == 0:
+                raise Exception("Please select at least one cloth")
+            
+            new_outfit = Outfit(self.outfit_name_field.value, cloth_list)
             new_outfit.save()
-            self.main_dialog.close()
-            self.update()
+            self.back(e)
+        except IntegrityError as e:
+            self.insert_error_dialog.show("Oops!", StyledText(f"Outfit {new_outfit.name} already exist", 16))
         except Exception as e:
-            self.main_dialog.close()
-            print(str(e))
+            self.insert_error_dialog.show("Oops!", StyledText(str(e), 16))
 
     def on_edit_outfit(self, e):
         try:
+            cloth_list = self.cloth_picker.get_selected_cloths()
+            if len(cloth_list) == 0:
+                raise Exception("Please select at least one cloth")
+            
             self.current_outfit.name = self.outfit_name_field.value
-            self.current_outfit.cloth_list = self.cloth_picker.get_selected_cloths()
+            self.current_outfit.cloth_list = cloth_list
             self.current_outfit.edit()
             self.back(e)
 
+        except IntegrityError as e:
+            self.edit_error_dialog.show("Oops!", StyledText(f"Outfit {self.current_outfit.name} already exist", 16))
         except Exception as e:
-            self.back(e)
-            print(str(e))
-            pass
+            self.edit_error_dialog.show("Oops!", StyledText(str(e), 16))
 
     def on_delete_outfit(self, e):
         try:
             self.current_outfit.delete()
             self.back(e)
         except Exception as e:
-            # self.error_dialog.show("Error", StyledText(str(e), 16))
-            self.back(e)
-            print(str(e))
+            self.edit_error_dialog.show("Oops!", StyledText(str(e), 16))
+
     
     def show_edit_page(self, e):
         self.detail_dialog.close()
@@ -60,33 +67,49 @@ class OutfitPage(Container):
         self.edit_outfit_page = Stack(
             controls=[
                 Container(
-                    padding=padding.all(15),
-                    content=Column(
-                        scroll=ScrollMode.ADAPTIVE,
+                    margin=padding.all(15),
+                    content=Stack(
                         controls=[
-                            Row(controls=[
-                                IconButton(icons.ARROW_BACK, icon_color=Themes.slate500,
-                                           icon_size=20, tooltip="Back", on_click=self.back),
-                                StyledText("Edit Outfit", 20, weight=800)
-                            ]),
-                            self.outfit_name_field,
-                            self.cloth_picker
-                        ],
-                        expand=True
+                            Column(
+                                controls=[
+                                    Container(expand=True),
+                                    Row(
+                                        controls=[
+                                            Container(
+                                                content=self.outfit_name_field,
+                                                expand=True
+                                            ),
+                                            NiceButton("Delete Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_delete_outfit,
+                                                bgcolor=Themes.rose600, bg_overlay_color=Themes.rose500, text_color=Themes.slate50),
+                                            NiceButton("Edit Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_edit_outfit,
+                                                bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
                     )
                 ),
                 Container(
-                    content=Row(
+                    margin=margin.only(15, 15, 15, 80),
+                    content=Stack(
                         controls=[
-                            NiceButton("Delete Outfit", Icon(icons.DELETE, Themes.slate50, size=21), on_click=self.on_delete_outfit,
-                                       bgcolor=Themes.rose600, bg_overlay_color=Themes.rose500, text_color=Themes.slate50),
-                            NiceButton("Edit Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_edit_outfit,
-                                       bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
+                            Column(
+                                scroll=ScrollMode.ADAPTIVE,
+                                controls=[
+                                    Row(controls=[
+                                        IconButton(icons.ARROW_BACK, icon_color=Themes.slate500,
+                                                icon_size=20, tooltip="Back", on_click=self.back),
+                                        StyledText("Edit Outfit", 20, weight=800)
+                                    ]),
+                                    self.cloth_picker
+                                ],
+                            )
                         ]
-                    ),
-                    right=0, bottom=0,
-                    margin=margin.all(15),
+                    )
                 ),
+            
+                self.edit_error_dialog
             ],
             expand=True
         )
@@ -94,27 +117,59 @@ class OutfitPage(Container):
         super().update()
         self.outfit_name_field.focus()
 
-    def show_insert_dialog(self, e):
+    def show_insert_page(self, e):
         self.outfit_name_field = StyledTextField(
             "Outfit Name", placeholder="Enter Outfit Name")
         self.cloth_picker = ClothPicker()
-        self.main_dialog.show("Insert Outfit",
-                              Column(
-                                  spacing=5,
-                                  controls=[
-                                      StyledText("Outfit Name", 13),
-                                      self.outfit_name_field,
-                                      Container(height=7),
-                                      self.cloth_picker
-                                  ],
-                                  scroll=ScrollMode.ADAPTIVE,
-                                  expand=True,
-                              ),
-                              [
-                                  NiceButton("Insert Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_add_outfit,
-                                             bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
-                              ]
+        self.edit_outfit_page = Stack(
+            controls=[
+                Container(
+                    margin=padding.all(15),
+                    content=Stack(
+                        controls=[
+                            Column(
+                                controls=[
+                                    Container(expand=True),
+                                    Row(
+                                        controls=[
+                                            Container(
+                                                content=self.outfit_name_field,
+                                                expand=True
+                                            ),
+                                            NiceButton("Insert Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_add_outfit,
+                                                bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ),
+                Container(
+                    margin=margin.only(15, 15, 15, 80),
+                    content=Stack(
+                        controls=[
+                            Column(
+                                scroll=ScrollMode.ADAPTIVE,
+                                controls=[
+                                    Row(controls=[
+                                        IconButton(icons.ARROW_BACK, icon_color=Themes.slate500,
+                                                icon_size=20, tooltip="Back", on_click=self.back),
+                                        StyledText("Insert Outfit", 20, weight=800)
+                                    ]),
+                                    self.cloth_picker
+                                ],
+                            )
+                        ]
+                    )
+                ),
+            
+                self.insert_error_dialog
+            ],
+            expand=True
         )
+        self.content = self.edit_outfit_page
+        super().update()
 
     def back(self, e):
         self.content = self.main_page
@@ -185,21 +240,14 @@ class OutfitPage(Container):
             controls=self.outfit_card_list,
             wrap=True
         )
-        self.main_dialog = Dialog(title="Insert Outfit",
-                                  bottom_controls=[
-                                      NiceButton("Insert Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_add_outfit,
-                                                 bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
-                                  ],
-                                  margin=margin.symmetric(60, 170),
-                                  )
-
-        self.detail_dialog = Dialog(title="Outfit Detail",
-                                    bottom_controls=[
-                                        NiceButton("Edit Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_edit_outfit,
-                                                   bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
-                                    ],
-                                    margin=margin.symmetric(60, 170),
-                                    )
+        self.detail_dialog = Dialog(
+            title="Outfit Detail",
+            bottom_controls=[
+                NiceButton("Edit Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_edit_outfit,
+                    bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
+            ],
+            margin=margin.symmetric(60, 170),
+        )
 
         self.current_search = ""
         self.current_outfit = None
@@ -224,18 +272,20 @@ class OutfitPage(Container):
                     )
                 ),
                 Container(
-                    content=NiceButton("Add Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.show_insert_dialog,
+                    content=NiceButton("Add Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.show_insert_page,
                                        bgcolor=Themes.rose600, bg_overlay_color=Themes.rose500, text_color=Themes.slate50),
                     right=0, bottom=0,
                     margin=margin.all(15),
                 ),
-                self.main_dialog,
                 self.detail_dialog
             ],
             expand=True
         )
 
         self.edit_outfit_page = None
+
+        self.insert_error_dialog = ErrorDialog()
+        self.edit_error_dialog = ErrorDialog()
 
         super().__init__(
             margin=margin.all(0),
