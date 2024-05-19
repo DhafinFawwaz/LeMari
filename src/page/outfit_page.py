@@ -108,7 +108,7 @@ class OutfitPage(Container):
                                     Row(controls=[
                                         IconButton(icons.ARROW_BACK, icon_color=Themes.slate500,
                                                 icon_size=20, tooltip="Back", on_click=self.back),
-                                        StyledText("Edit Outfit", 20, weight=800)
+                                        StyledText("Edit Outfit " + self.current_outfit.name, 20, weight=800)
                                     ]),
                                     self.cloth_picker
                                 ],
