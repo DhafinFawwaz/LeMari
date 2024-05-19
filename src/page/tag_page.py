@@ -22,6 +22,7 @@ class PillTag(Row):
             text_color=Themes.slate50,
             text_overlay_color=Themes.slate950,
             bg_overlay_color=Themes.slate200,
+            content_padding=ft.padding.symmetric(7, 15),
         )
         super().__init__(
             [self.background],
@@ -65,14 +66,15 @@ class TagPage(Stack):
             self.show_error_dialog("error mas")
 
     def show_add_dialog(self, e):
+        text_field = StyledTextField(
+                placeholder="Insert new tag name",
+                on_change=self.input_change_handler,
+            )
         self.main_dialog.show(
             title="Add Tag",
             content=Column(
                 controls=[
-                    StyledTextField(
-                        placeholder="Insert new tag name",
-                        on_change=self.input_change_handler,
-                    )
+                    text_field
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 expand=True,
@@ -92,6 +94,7 @@ class TagPage(Stack):
                 ),
             ],
         )
+        text_field.focus()
 
     def show_error_dialog(self, message):
         self.error_dialog.show(title="ERROR", content=StyledText(str(message), 16))
@@ -122,14 +125,16 @@ class TagPage(Stack):
         self.current_change = e
 
     def show_edit_dialog(self, e, tag: Tag):
+        text_field = StyledTextField(
+            placeholder=tag.name,
+            initial_value=tag.name,
+            on_change=lambda e: self.on_change_edit(e, self.current_change),
+        )
         self.main_dialog.show(
             title="Edit Tag",
             content=Column(
                 controls=[
-                    StyledTextField(
-                        placeholder=tag.name,
-                        on_change=lambda e: self.on_change_edit(e, self.current_change),
-                    )
+                    text_field
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 expand=True,
@@ -161,6 +166,7 @@ class TagPage(Stack):
                 )
             ],
         )
+        text_field.focus()
 
     def __init__(self):
         self.current_change = None
@@ -204,9 +210,8 @@ class TagPage(Stack):
                         bg_overlay_color=Themes.rose500,
                         text_color=Themes.slate50
                     ),
-                    right=30,
-                    bottom=20,
-                    # width=200
+                    right=0, bottom=0,
+                    margin=ft.margin.all(15),
                 ),
                 self.main_dialog,
                 self.error_dialog

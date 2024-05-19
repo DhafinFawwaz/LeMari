@@ -28,9 +28,9 @@ def main(page: ft.Page):
     page.add(Navbar(
         [
             first_open_button,
-            NormalButton("Cloth", ft.Icon(ft.icons.CHECKROOM, "white"), text_overlay_color=Themes.slate950),
-            NormalButton("Tags", ft.Icon(ft.icons.LOCAL_OFFER, "white"), text_overlay_color=Themes.slate950),
-            NormalButton("About", ft.Icon(ft.icons.INFO, "white"), text_overlay_color=Themes.slate950),
+            NormalButton("Cloth", ft.Icon(ft.icons.CHECKROOM, "white", size=icon_size), text_overlay_color=Themes.slate950),
+            NormalButton("Tags", ft.Icon(ft.icons.LOCAL_OFFER, "white", size=icon_size), text_overlay_color=Themes.slate950),
+            NormalButton("About", ft.Icon(ft.icons.INFO, "white", size=icon_size), text_overlay_color=Themes.slate950),
         ], [
             OutfitPage(),
             ClothPage(file_picker),

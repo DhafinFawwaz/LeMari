@@ -120,11 +120,12 @@ class ClothPage(Container):
                 NiceButton("Insert Cloth", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_add_cloth, bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50),
             ]
         )
+        self.cloth_name_field.focus()
 
     # Show edit dialog pop up
     def show_edit_dialog(self, e, cloth: Cloth):
         self.current_cloth = cloth
-        self.cloth_name_field = StyledTextField(placeholder=cloth.name)
+        self.cloth_name_field = StyledTextField(placeholder=cloth.name, initial_value=cloth.name)
         self.cloth_name_field.value = cloth.name
         self.tag_picker = TagPicker()
         self.tag_picker.set_choosen_tags(cloth.tag_list)
@@ -152,6 +153,7 @@ class ClothPage(Container):
             ]
         )
         
+        self.cloth_name_field.focus()
         self.image_picker.update()
 
     # Update the card list GUI

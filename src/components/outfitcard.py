@@ -1,7 +1,7 @@
 from typing import Optional, Any, Union, List
 from theme.themes import Themes
 from components.styled_text import StyledText
-from flet import Card, Image, Row, Column, Container, Padding, ImageFit, ImageRepeat, RoundedRectangleBorder, CrossAxisAlignment, ClipBehavior, FilterQuality, padding, Animation, AnimationCurve
+from flet import Card, Image, Row, Column, Container, Padding, ImageFit, ImageRepeat, RoundedRectangleBorder, CrossAxisAlignment, ClipBehavior, FilterQuality, padding, Animation, AnimationCurve, margin
 from database.cloth import Cloth
 from database.outfit import Outfit
 from typing import Callable
@@ -28,8 +28,10 @@ class OutfitCard(Container):
                         controls=[
                             Image(fit=ImageFit.COVER, width=width, height=image_height,
                                   repeat=ImageRepeat.NO_REPEAT, src=f"https://picsum.photos/200/200", filter_quality=FilterQuality.MEDIUM),
-                            StyledText(
-                                outfit.name, size=18, color=text_color, weight=800),
+                            Container(
+                                content=StyledText(outfit.name, size=18, color=text_color, weight=800),
+                                margin=margin.symmetric(0, 15)
+                            ),
                         ],
                         horizontal_alignment=CrossAxisAlignment.CENTER
                     ),
@@ -55,8 +57,10 @@ class OutfitCard(Container):
                         controls=[
                             Image(fit=ImageFit.COVER, width=width, height=image_height,
                                   repeat=ImageRepeat.NO_REPEAT, src=outfit.cloth_list[0].get_image_path(), filter_quality=FilterQuality.MEDIUM),
-                            StyledText(
-                                outfit.name, size=18, color=text_color, weight=800),
+                            Container(
+                                content=StyledText(outfit.name, size=18, color=text_color, weight=800),
+                                margin=margin.symmetric(0, 15)
+                            ),
                         ],
                         horizontal_alignment=CrossAxisAlignment.CENTER
                     ),
@@ -90,8 +94,10 @@ class OutfitCard(Container):
                                           repeat=ImageRepeat.NO_REPEAT, src=outfit.cloth_list[1].get_image_path(), filter_quality=FilterQuality.MEDIUM)
                                 ]
                             ),
-                            StyledText(
-                                outfit.name, size=18, color=text_color, weight=800),
+                            Container(
+                                content=StyledText(outfit.name, size=18, color=text_color, weight=800),
+                                margin=margin.symmetric(0, 15)
+                            ),
                         ],
                         horizontal_alignment=CrossAxisAlignment.CENTER
                     ),
@@ -133,8 +139,10 @@ class OutfitCard(Container):
                                           repeat=ImageRepeat.NO_REPEAT, src=outfit.cloth_list[2].get_image_path(), filter_quality=FilterQuality.MEDIUM)
                                 ]
                             ),
-                            StyledText(
-                                outfit.name, size=18, color=text_color, weight=800),
+                            Container(
+                                content=StyledText(outfit.name, size=18, color=text_color, weight=800),
+                                margin=margin.symmetric(0, 15)
+                            ),
                         ],
                         horizontal_alignment=CrossAxisAlignment.CENTER
                     ),
@@ -184,8 +192,10 @@ class OutfitCard(Container):
                                     )
                                 ]
                             ),
-                            StyledText(
-                                outfit.name, size=18, color=text_color, weight=800),
+                            Container(
+                                content=StyledText(outfit.name, size=18, color=text_color, weight=800),
+                                margin=margin.symmetric(0, 15)
+                            ),
                         ],
                         horizontal_alignment=CrossAxisAlignment.CENTER
                     ),

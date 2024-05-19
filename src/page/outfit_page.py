@@ -54,7 +54,7 @@ class OutfitPage(Container):
     def show_edit_page(self, e):
         self.detail_dialog.close()
         self.outfit_name_field = StyledTextField(
-            "Outfit Name", placeholder=self.current_outfit.name)
+            "Outfit Name", placeholder=self.current_outfit.name, initial_value=self.current_outfit.name)
         self.outfit_name_field.value = self.current_outfit.name
         self.cloth_picker = ClothPicker(self.current_outfit.cloth_list)
         self.edit_outfit_page = Stack(
@@ -78,7 +78,7 @@ class OutfitPage(Container):
                 Container(
                     content=Row(
                         controls=[
-                            NiceButton("Delete Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_delete_outfit,
+                            NiceButton("Delete Outfit", Icon(icons.DELETE, Themes.slate50, size=21), on_click=self.on_delete_outfit,
                                        bgcolor=Themes.rose600, bg_overlay_color=Themes.rose500, text_color=Themes.slate50),
                             NiceButton("Edit Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_edit_outfit,
                                        bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
@@ -92,6 +92,7 @@ class OutfitPage(Container):
         )
         self.content = self.edit_outfit_page
         super().update()
+        self.outfit_name_field.focus()
 
     def show_insert_dialog(self, e):
         self.outfit_name_field = StyledTextField(
@@ -107,7 +108,7 @@ class OutfitPage(Container):
                                       self.cloth_picker
                                   ],
                                   scroll=ScrollMode.ADAPTIVE,
-                                  expand=True
+                                  expand=True,
                               ),
                               [
                                   NiceButton("Insert Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.on_add_outfit,
@@ -136,7 +137,8 @@ class OutfitPage(Container):
                 controls=[
                     self.cloth_list_row
                 ],
-                expand=True
+                expand=True,
+                scroll=ScrollMode.ADAPTIVE
             ),
             [
                 NiceButton("Edit Outfit", Icon(icons.CREATE, color=Themes.slate50, size=15), on_click=self.show_edit_page,
