@@ -36,6 +36,10 @@ class ClothPage(Container):
             if (self.cloth_name_field.value == ""):
                 raise Exception("Insert name", "Please enter the cloth name.")
             
+            # If no tag has been selected, raise an exception
+            if (len(self.tag_picker.choosen_tags) == 0):
+                raise Exception("No tag selected", "Please select at least one tag.")
+            
             # OK, image's fine, let's continue
             new_cloth = Cloth(self.cloth_name_field.value, self.image_picker.choosen_image.name, self.tag_picker.choosen_tags)
             new_cloth.save()
@@ -56,6 +60,11 @@ class ClothPage(Container):
             # If somehow the selected image extension is not jpg, jpeg, or png, raise an exception
             if (not self.image_picker.choosen_image.name.lower().endswith(('.jpg', '.jpeg', '.png'))):
                 raise Exception("Invalid format", "The selected image must be a jpg, jpeg, or png file.")
+            
+            # If no tag has been selected, raise an exception
+            if (len(self.tag_picker.choosen_tags) == 0):
+                raise Exception("No tag selected", "Please select at least one tag.")
+            
             
 
             # OK, image's fine, let's continue
