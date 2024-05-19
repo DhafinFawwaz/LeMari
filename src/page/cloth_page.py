@@ -137,7 +137,7 @@ class ClothPage(Container):
         self.image_picker.set_choosen_image(cloth.image_name, cloth.get_image_path())
 
 
-        self.main_dialog.show("Edit Cloth" + cloth.name, 
+        self.main_dialog.show("Edit Cloth " + cloth.name, 
             Column(
                 spacing=5,
                 controls=[
