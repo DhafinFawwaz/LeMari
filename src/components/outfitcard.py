@@ -58,7 +58,7 @@ class OutfitCard(Container):
                             Image(fit=ImageFit.COVER, width=width, height=image_height,
                                   repeat=ImageRepeat.NO_REPEAT, src=outfit.cloth_list[0].get_image_path(), filter_quality=FilterQuality.MEDIUM),
                             Container(
-                                content=StyledText(outfit.name, size=18, color=text_color, weight=800),
+                                content=StyledText(outfit.name, size=18, color=text_color, weight=800, text_align="center"),
                                 margin=margin.symmetric(0, 15)
                             ),
                         ],
@@ -95,7 +95,7 @@ class OutfitCard(Container):
                                 ]
                             ),
                             Container(
-                                content=StyledText(outfit.name, size=18, color=text_color, weight=800),
+                                content=StyledText(outfit.name, size=18, color=text_color, weight=800, text_align="center"),
                                 margin=margin.symmetric(0, 15)
                             ),
                         ],
@@ -140,7 +140,7 @@ class OutfitCard(Container):
                                 ]
                             ),
                             Container(
-                                content=StyledText(outfit.name, size=18, color=text_color, weight=800),
+                                content=StyledText(outfit.name, size=18, color=text_color, weight=800, text_align="center"),
                                 margin=margin.symmetric(0, 15)
                             ),
                         ],
@@ -193,7 +193,7 @@ class OutfitCard(Container):
                                 ]
                             ),
                             Container(
-                                content=StyledText(outfit.name, size=18, color=text_color, weight=800),
+                                content=StyledText(outfit.name, size=18, color=text_color, weight=800, text_align="center"),
                                 margin=margin.symmetric(0, 15)
                             ),
                         ],
