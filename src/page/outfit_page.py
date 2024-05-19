@@ -59,36 +59,46 @@ class OutfitPage(Container):
         self.edit_outfit_page = Stack(
             controls=[
                 Container(
-                    padding=padding.all(15),
-                    content=Column(
-                        scroll=ScrollMode.ADAPTIVE,
+                    margin=padding.all(15),
+                    content=Stack(
                         controls=[
-                            Row(controls=[
-                                IconButton(icons.ARROW_BACK, icon_color=Themes.slate500,
-                                           icon_size=20, tooltip="Back", on_click=self.back),
-                                StyledText("Edit Outfit", 20, weight=800)
-                            ]),
-                            self.cloth_picker
-                        ],
-                        expand=True
+                            Column(
+                                controls=[
+                                    Container(expand=True),
+                                    Row(
+                                        controls=[
+                                            Container(
+                                                content=self.outfit_name_field,
+                                                expand=True
+                                            ),
+                                            NiceButton("Delete Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_delete_outfit,
+                                                bgcolor=Themes.rose600, bg_overlay_color=Themes.rose500, text_color=Themes.slate50),
+                                            NiceButton("Edit Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_edit_outfit,
+                                                bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
                     )
                 ),
                 Container(
-                    content=Row(
+                    margin=margin.only(15, 15, 15, 80),
+                    content=Stack(
                         controls=[
-                            Container(
-                                content=self.outfit_name_field,
-                                width=300
-                            ),
-                            NiceButton("Delete Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_delete_outfit,
-                                       bgcolor=Themes.rose600, bg_overlay_color=Themes.rose500, text_color=Themes.slate50),
-                            NiceButton("Edit Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_edit_outfit,
-                                       bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
+                            Column(
+                                scroll=ScrollMode.ADAPTIVE,
+                                controls=[
+                                    Row(controls=[
+                                        IconButton(icons.ARROW_BACK, icon_color=Themes.slate500,
+                                                icon_size=20, tooltip="Back", on_click=self.back),
+                                        StyledText("Edit Outfit", 20, weight=800)
+                                    ]),
+                                    self.cloth_picker
+                                ],
+                            )
                         ]
-                    ),
-                    right=0, 
-                    bottom=0,
-                    margin=margin.all(15),
+                    )
                 ),
             ],
             expand=True
@@ -103,34 +113,44 @@ class OutfitPage(Container):
         self.edit_outfit_page = Stack(
             controls=[
                 Container(
-                    padding=padding.all(15),
-                    content=Column(
-                        scroll=ScrollMode.ADAPTIVE,
+                    margin=padding.all(15),
+                    content=Stack(
                         controls=[
-                            Row(controls=[
-                                IconButton(icons.ARROW_BACK, icon_color=Themes.slate500,
-                                           icon_size=20, tooltip="Back", on_click=self.back),
-                                StyledText("Insert Outfit", 20, weight=800)
-                            ]),
-                            self.cloth_picker
-                        ],
-                        expand=True
+                            Column(
+                                controls=[
+                                    Container(expand=True),
+                                    Row(
+                                        controls=[
+                                            Container(
+                                                content=self.outfit_name_field,
+                                                expand=True
+                                            ),
+                                            NiceButton("Insert Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_add_outfit,
+                                                bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
+                                        ]
+                                    )
+                                ]
+                            )
+                        ]
                     )
                 ),
                 Container(
-                    content=Row(
+                    margin=margin.only(15, 15, 15, 80),
+                    content=Stack(
                         controls=[
-                            Container(
-                                content=self.outfit_name_field,
-                                width=300
-                            ),
-                            NiceButton("Insert Outfit", Icon(icons.ADD, Themes.slate50, size=21), on_click=self.on_add_outfit,
-                                       bgcolor=Themes.green500, bg_overlay_color=Themes.green600, text_color=Themes.slate50)
+                            Column(
+                                scroll=ScrollMode.ADAPTIVE,
+                                controls=[
+                                    Row(controls=[
+                                        IconButton(icons.ARROW_BACK, icon_color=Themes.slate500,
+                                                icon_size=20, tooltip="Back", on_click=self.back),
+                                        StyledText("Insert Outfit", 20, weight=800)
+                                    ]),
+                                    self.cloth_picker
+                                ],
+                            )
                         ]
-                    ),
-                    right=0, 
-                    bottom=0,
-                    margin=margin.all(15),
+                    )
                 ),
             ],
             expand=True
