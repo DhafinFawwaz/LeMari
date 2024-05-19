@@ -47,32 +47,54 @@ disini.
 ![tag_add.png](doc/tag_add.png)
 *Tag Add*
 
-## 🏃🏻‍♂️ Cara Menjalankan Aplikasi
-
+## 🏃🏻‍♂️ Cara Menjalankan Proyek
+### Aplikasi/Build
+1. Download executable dari release [Releases](https://gitlab.informatika.org/raflyhangga/if2250-2024-k02-05-le-mari/-/releases)
+2. Klik link untuk executable versi terbaru, misalnya [Le Mari v1.0.2](https://drive.google.com/drive/folders/12TPyhd-6h3hgQA9ofeqsyoDVfLQi1Nhe)
+3. Setelah dialihkan ke Google Drive, download executable di Google Drive tersebut.
+4. Double click file `.exe` yang telah didownload.
+5. Jika menggunakan sistem operasi Windows bisa jadi akan muncul pop up windows protection, klik `More Info` <br> ![more_info.png](doc/more_info.png)
+6. Lalu klik ``Run anyway`` <br> ![run_anyway.png](doc/run_anyway.png)
+7. Jika menggunakan sistem operasi Linux, pastikan memberikan permission terlebih dahulu. Misalnya.
 ```
-// untuk memasang library
-pip install -r requirements.txt
-
-// untuk menjalankan aplikasi
-flet run src/main.py
+chmod +x "./Le Mari.exe"
+```
+8. Lalu jalankan aplikasi tersebut
+```
+"./Le Mari.exe"
 ```
 
+### Development
+Direkomendasikan menggunakan virtual environment seperti berikut ini
 ```
-// untuk memasang library
-pip install -r requirements.txt
-
-// untuk kompilasi aplikasi menjadi .exe, file hasil kompilasi berada di folder dist
-flet pack src/main.py --name LeMari --add-data src/assets/font/*.ttf:assets/font src/assets/image/*.png:assets/image --icon src/assets/image/favicon.ico
-```
-
-```
-// direkomendasikan menggunakan virtual environtment seperti berikut ini
 pip install virtualenv
 python -m venv .venv
 .venv/Scripts/activate.bat
 pip install -r requirements.txt
 flet run src/main.py
 ```
+
+Untuk memasang library dependencies, jalankan command berikut ini
+```
+pip install -r requirements.txt
+```
+
+Untuk menjalankan aplikasi selama pengembangan, jalankan command berikut
+```
+flet run src/main.py
+```
+Atau
+```
+python src/main.py
+```
+
+Untuk kompilasi aplikasi menjadi .exe, file hasil kompilasi berada di folder dist
+```
+flet pack src/main.py --name LeMari --add-data src/assets/font/*.ttf:assets/font src/assets/image/*.png:assets/image --icon src/assets/image/favicon.ico
+```
+
+
+
 
 # 🏬 Database
 ## Cloth Table
