@@ -48,6 +48,30 @@ disini.
 *Tag Add*
 
 ## 🏃🏻‍♂️ Cara Menjalankan Aplikasi
+```
+// direkomendasikan menggunakan virtual environtment seperti berikut ini
+pip install virtualenv
+python -m venv .venv
+.venv/Scripts/activate.bat
+pip install -r requirements.txt
+flet run src/main.py
+```
+
+### Aplikasi
+
+
+```
+// untuk memasang library
+pip install -r requirements.txt
+
+// untuk kompilasi aplikasi menjadi .exe, file hasil kompilasi berada di folder dist
+flet pack src/main.py --name LeMari --add-data src/assets/font/*.ttf:assets/font src/assets/image/*.png:assets/image --icon src/assets/image/favicon.ico
+```
+1. Buka folder ``dist`` <br> ![folder_dist.png](doc/folder_dist.png)
+2. Buka ``LeMari.exe`` <br> ![icon_exe.png](doc/icon_exe.png)
+3. Apabila terdapat windows protection, lakukan ``run anyway`` <br> ![run_anyway.png](doc/run_anyway.png)
+
+### Development
 
 ```
 // untuk memasang library
@@ -57,22 +81,8 @@ pip install -r requirements.txt
 flet run src/main.py
 ```
 
-```
-// untuk memasang library
-pip install -r requirements.txt
 
-// untuk kompilasi aplikasi menjadi .exe, file hasil kompilasi berada di folder dist
-flet pack src/main.py --name LeMari --add-data src/assets/font/*.ttf:assets/font src/assets/image/*.png:assets/image --icon src/assets/image/favicon.ico
-```
 
-```
-// direkomendasikan menggunakan virtual environtment seperti berikut ini
-pip install virtualenv
-python -m venv .venv
-.venv/Scripts/activate.bat
-pip install -r requirements.txt
-flet run src/main.py
-```
 
 # 🏬 Database
 ## Cloth Table
